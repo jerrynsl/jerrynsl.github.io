@@ -10,10 +10,10 @@
   </head>
 
     
-    <body>
+    <body class="">
 
         <nav class="navbar navbar-expand-lg navbar-light ">
-        <div class="container">
+        <div class="container-sm">
                 
             
             <a class="navbar-brand " href="#">Pricing example</a>
@@ -37,7 +37,10 @@
                 
             </div>
         </nav>
-        <div class="container-sm">
+
+        
+
+        <div class="container-sm border-top ">
         <div class="p-5  text-center">
             <h1>Pricing</h1>
             <p class="text-secondary text-break"> Quickly build an effective pricing table for your potential customer with this Bootstrap example. It's built with default
@@ -46,15 +49,15 @@
         </div>
     </div> 
 
-<div class="container">
-    <div class="row w-40 ">
-      <div class="col border">
+<div class="container-sm ">
+    <div class="row">
+      <div class="col-sm border">
         <div class="container-fluid bg-light text-center">
 
             <h4>Free</h4>
     
           </div>
-        <div class="text-center ">
+        <div class="text-center lh-1">
         <h3>$0<a class="text-secondary">/mo</a></h3>
             <p>10 user include</p>
             <p>2GB of storage</p>
@@ -65,7 +68,7 @@
         </div>
 
     </div>
-      <div class="col">
+      <div class="col-sm">
         <div class=" border">
             
             <div class="container-fluid bg-light text-center">
@@ -73,7 +76,7 @@
                 <h4>Pro</h4>
         
               </div>
-            <div class="text-center ">
+            <div class="text-center lh-1 ">
             <h3>$15<a class="text-secondary">/mo</a></h3>
                 <p>20 user include</p>
                 <p>10GB of storage</p>
@@ -84,7 +87,7 @@
             </div>
     </div>
 
-    <div class="col">
+    <div class="col-sm">
         <div class=" border ">
             
             <div class="container-fluid bg-primary text-white text-center">
@@ -92,7 +95,7 @@
                 <h4>Enterprise</h4>
         
               </div>
-            <div class="text-center ">
+            <div class="text-center lh-1">
             <h3>$29<a class="text-secondary">/mo</a></h3>
                 <p>30 user include</p>
                 <p>15GB of storage</p>
@@ -106,6 +109,105 @@
   </div>
   </div>
 
+  <div class="container border-bottom">
+    <div class="p-5  text-center">
+        <h1 class="text-center">Compare plans</h1>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col-2">Free</th>
+                <th scope="col-2">Pro</th>
+                <th scope="col-2">Enterprise</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row text-start">Public</th>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <th scope="row text-start">Private</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row text-start">Permissions</th>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <th scope="row text-start">Sharing</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <th scope="row text-start">Unlimited members</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <th scope="row text-start">Extra securiy</th>
+                <td ></td>
+                <td></td>
+                <td>✓</td>
+              </tr>
+            </tfoot>
+          </table>
+    </div>
+    
+</div> 
+
+    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
   </body>
+
+  <footer>
+    <div class="container-sm pt-5">
+      <div class="row lh-1">
+        <div class="col-sm">
+          <h3></h3>
+          <p class="text-secondary">©2017-2021</p>
+        </div>
+        <div class="col">
+          <h5>Features</h5>
+          <p class="text-secondary pt-2">Cool stuff</p>
+          <p class="text-secondary">Random feature</p>
+          <p class="text-secondary">Team feature</p>
+          <p class="text-secondary">Stuff for developers</p>
+          <p class="text-secondary">Another one</p>
+          <p class="text-secondary">Last time</p>
+
+        </div>
+        <div class="col">
+          <h5>Resources</h5>
+          <p class="text-secondary pt-2">Resource</p>
+          <p class="text-secondary">Resource name</p>
+          <p class="text-secondary">Another resource</p>
+          <p class="text-secondary">Final resource</p>
+         
+        </div>
+
+        <div class="col-sm">
+          <h5>About</h5>
+          <p class="text-secondary pt-2">Team</p>
+          <p class="text-secondary">Locations</p>
+          <p class="text-secondary">Privacy</p>
+          <p class="text-secondary">Terms</p>
+         
+
+        </div>
+    
+  </div>
+</div>
+  </footer>
 </html>
