@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS → -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
-    <title>My First Bootstrap Page</title>
+    <title>Exercise 3 Desktop</title>
   </head>
 
     
@@ -14,24 +14,24 @@
 
         <nav class="navbar navbar-expand-lg navbar-light ">
         <div class="container">
+          <div class="justify-content-start">   
+          <img src="logo2.svg" class="img-fluid" alt="logo 2" width="7%"> 
+          <a class="navbar-brand " href="#">Pricing example</a>
                 
-            
-            <a class="navbar-brand " href="#">Pricing example</a>
-                
+          </div>
                 <ul class="nav justify-content-end ">
                     
-                  <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">Home</a>
+                  <li class="nav-item ">
+                    <a class="nav-link text-dark" aria-current="page" href="#">Features</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link =" href="#">Exercise</a>
+                    <a class="nav-link text-dark" href="#">Enterprise</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#" >About</a>
-                    
+                    <a class="nav-link text-dark" href="#" >Support</a>
                   </li>
                   <li class="nav-item ">
-                    <a class="nav-link " href="#">Contact</a>
+                    <a class="nav-link text-dark" href="#">Pricing</a>
                   </li>
                 </ul>
                 
@@ -50,57 +50,64 @@
     </div> 
 
 <div class="container-sm ">
-    <div class="row">
-      <div class="col border">
-        <div class="container-fluid bg-light text-center">
+    <div class="row d-flex justify-content-center ">
+      <div class="container w-25">
+      <div class="col border rounded-2 pb-2">
+        <div class="container-fluid bg-light text-center p-2">
 
             <h4>Free</h4>
     
           </div>
         <div class="text-center lh-1">
-        <h3>$0<a class="text-secondary">/mo</a></h3>
-            <p>10 user include</p>
-            <p>2GB of storage</p>
-            <p>Email support</p>
-            <p>Help center access</p>
+        <h1 class="pt-2">$0<span class="text-secondary">/mo</span></h1>
+           <div class="row p-4">
+            <span>10 users included</span>
+            <span>2 GB of storage</span>
+            <span>Email support</span>
+            <span>Help center access</span>
+        </div>
             <button type="button" class="btn btn-outline-primary w-75">Sign up for free</button>
+          </div>
+        </div>
+      </div>
+    
 
+      <div class="container w-25">
+        <div class="col border rounded-2 pb-2">
+          <div class="container-fluid bg-light text-center p-2">
+  
+              <h4>Pro</h4>
+      
+            </div>
+          <div class="text-center lh-1">
+          <h1 class="pt-2">$15<span class="text-secondary">/mo</span></h1>
+             <div class="row p-4">
+              <span>20 users included</span>
+              <span>10 GB of storage</span>
+              <span>Priority email support</span>
+              <span>Help center access</span>
+          </div>
+              <button type="button" class="btn btn-outline-primary w-75">Sign up for free</button>
+            </div>
+          </div>
         </div>
 
-    </div>
-      <div class="col">
-        <div class=" border">
+    <div class="container w-25">
+        <div class="col border border-primary rounded-2 pb-2">
             
-            <div class="container-fluid bg-light text-center">
+            <div class="container-fluid bg-primary text-white text-center p-2">
 
-                <h4>Pro</h4>
-        
-              </div>
-            <div class="text-center lh-1 ">
-            <h3>$15<a class="text-secondary">/mo</a></h3>
-                <p>20 user include</p>
-                <p>10GB of storage</p>
-                <p>Priority email support</p>
-                <p>Help center access</p>
-                <button class="btn btn-primary w-75" type="submit">Get started</button>
+              <h4>Enterprise</h4>
+      
             </div>
-            </div>
-    </div>
-
-    <div class="col">
-        <div class=" border ">
-            
-            <div class="container-fluid bg-primary text-white text-center">
-
-                <h4>Enterprise</h4>
-        
-              </div>
-            <div class="text-center lh-1">
-            <h3>$29<a class="text-secondary">/mo</a></h3>
-                <p>30 user include</p>
-                <p>15GB of storage</p>
-                <p>Phone and email support</p>
-                <p>Help center access</p>
+          <div class="text-center lh-1">
+          <h1 class="pt-2">$15<span class="text-secondary">/mo</span></h1>
+             <div class="row p-4">
+              <span>30 users included</span>
+              <span>15 GB of storage</span>
+              <span>Phone and email support</span>
+              <span>Help center access</span>
+          </div>
                 <button class="btn btn-primary w-75" type="submit">Contact us</button>
     
             </div>
@@ -109,62 +116,64 @@
   </div>
   </div>
 
-  <div class="container-sm border-bottom">
-    <div class="p-5  text-center">
+  <div class="container-sm border-bottom pb-5">
+    
         <h1 class="text-center">Compare plans</h1>
+        <div class="p-5 mx-5"></div>
         <table class="table">
             <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col-2">Free</th>
-                <th scope="col-2">Pro</th>
-                <th scope="col-2">Enterprise</th>
+                <th></th>
+                <th class="col-2 text-center">Free</th>
+                <th class="col-2 text-center">Pro</th>
+                <th class="col-2 text-center">Enterprise</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row text-start">Public</th>
-                <td>✓</td>
-                <td>✓</td>
-                <td>✓</td>
+                <th>Public</th>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
               </tr>
               <tr>
-                <th scope="row text-start">Private</th>
-                <td></td>
-                <td>✓</td>
-                <td>✓</td>
+                <th>Private</th>
+                <td class="text-center"></td>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <th scope="row text-start">Permissions</th>
-                <td>✓</td>
-                <td>✓</td>
-                <td>✓</td>
+                <th>Permissions</th>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
               </tr>
               <tr>
-                <th scope="row text-start">Sharing</th>
-                <td></td>
-                <td>✓</td>
-                <td>✓</td>
+                <th>Sharing</th>
+                <td class="text-center"></td>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
               </tr>
               <tr>
-                <th scope="row text-start">Unlimited members</th>
-                <td></td>
-                <td>✓</td>
-                <td>✓</td>
+                <th>Unlimited members</th>
+                <td class="text-center"></td>
+                <td class="text-center">✓</td>
+                <td class="text-center">✓</td>
               </tr>
               <tr>
-                <th scope="row text-start">Extra securiy</th>
-                <td ></td>
-                <td></td>
-                <td>✓</td>
+                <th>Extra securiy</th>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✓</td>
               </tr>
             </tfoot>
           </table>
     </div>
     
-</div> 
+ 
+
 
     
 
@@ -175,7 +184,8 @@
     <div class="container pt-5">
       <div class="row lh-1">
         <div class="col">
-          <h3></h3>
+          <img src="logo.svg" class="img-fluid" alt="Pricing Page logo" width="10%">
+          <p></p>
           <p class="text-secondary">©2017-2021</p>
         </div>
         <div class="col">
@@ -207,6 +217,7 @@
 
         </div>
     
+  </div>
   </div>
   </footer>
 </html>
