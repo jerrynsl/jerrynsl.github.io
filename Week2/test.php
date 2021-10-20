@@ -33,47 +33,39 @@
 
       ?>
     </select>
-  </div>
+  
 
-  <div class="btn-group">
-    <button class="btn btn-warning btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Month
-    </button>
-    <ul class="dropdown-menu">
+    <select class="bg-warning fs-2 rounded" id="day" name="month">
+    <option class='bg-white' selected>Month</option>
       <?php
 
 
 
       for ($month = 1; $month <= 12; $month++) {
 
-        echo "<li><a class='dropdown-item fs-6'>" . $month . "</a></li>";
+        echo "<option class='bg-white'>" . $month . "</option>" . "\n";
       }
 
-
+     
 
       ?>
-    </ul>
-  </div>
+    </select>
 
-  <div class="btn-group">
-    <button class="btn btn-danger btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Year
-    </button>
-    <ul class="dropdown-menu">
+    <select class="bg-danger fs-2 rounded" id="day" name="year">
+    <option class='bg-white' selected>Year</option>
       <?php
 
 
 
       for ($year = 1900; $year <= 2021; $year++) {
 
-        echo "<li><a class='dropdown-item fs-6'>" . $year . "</a></li>";
+        echo "<option class='bg-white'>" . $year . "</option>" . "\n";
       }
 
-
+     
 
       ?>
-    </ul>
-  </div>
+    </select>
   </form>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
 </body>
