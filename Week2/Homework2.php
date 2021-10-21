@@ -43,15 +43,21 @@ Topic: Homework 1 about use PHP to generate date select menu [array]-->
       <?php
 
       $month = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-
+      /*
       for ($c = 0; $c <= 11; $c++) {
 
         echo "<option class='bg-white' value='" . ($c + 1) . "'>$month[$c]</option>";
       }
 
 
+      */
+      foreach ($month as $c => $aMonth) {
+
+        echo "<option class='bg-white' value='" . ($c + 1) . "'>$aMonth</option>";
+      }
 
       ?>
+
     </select>
 
     <select class="bg-danger fs-2 rounded" id="day" name="year">
@@ -70,21 +76,7 @@ Topic: Homework 1 about use PHP to generate date select menu [array]-->
       ?>
     </select>
 
-    <select class="bg-warning fs-2 rounded" id="day" name="month">
-      <option class='bg-white' selected>Month</option>
-      <?php
-
-      $month = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-
-      foreach( $month as $c => $aMonth) {
-
-        echo "<option class='bg-white' value='" . ($c + 1) . "'>$aMonth</option>";
-      }
-
-
-
-      ?>
-    </select>
+  
 
   </form>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
