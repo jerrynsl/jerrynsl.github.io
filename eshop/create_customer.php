@@ -25,7 +25,7 @@
                 <a class="nav-link text-primary" href="product_create.php">Create Product</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-primary" href="customer_create.php" >Create Customer</a>
+                <a class="nav-link text-primary" href="create_customer.php" >Create Customer</a>
                 
               </li>
               <li class="nav-item ">
@@ -37,7 +37,7 @@
         </div>
       </nav>
         <div class="page-header">
-            <h1>Create Product</h1>
+            <h1>Create Customer</h1>
         </div>
 
 
@@ -47,24 +47,26 @@
             include 'config/database.php';
             try {
                 // insert query
-                $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
+                $query = "INSERT INTO customers SET username=:username, password=:password, fname=:fname, lname=:lname, gender=:gender, dob=:dob, regdatetime=:regdatetime, accountstatus=:accountstatus";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
-                $name = $_POST['name'];
-                $description = $_POST['description'];
-                $price = $_POST['price'];
-                $promo_price=$_POST['promo_price'];
-                $manu_date=$_POST['manu_date'];
-                $exp_date=$_POST['exp_date'];
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+                $fname = $_POST['fname'];
+                $lname = $_POST['lname'];
+                $gender = $_POST['gender'];
+                $dob = $_POST['dob'];
+                $acccountstatus = $_POST['accountstatus'];
                 // bind the parameters
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':description', $description);
-                $stmt->bindParam(':price', $price);
-                $created = date('Y-m-d H:i:s'); // get the current date and time
-                $stmt->bindParam(':created', $created);
-                $stmt->bindParam(':promotion_price', $promo_price);
-                $stmt->bindParam(':manufacture_date', $manu_date);
-                $stmt->bindParam(':expired_date', $exp_date);
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':fname', $fname);
+                $stmt->bindParam(':lname', $lname);
+                $stmt->bindParam(':gender', $gender);
+                $stmt->bindParam(':dob', $dob);
+                $regdatetime = date('Y-m-d H:i:s'); // get the current date and time
+                $stmt->bindParam(':regdatetime', $regdatetime);
+                $stmt->bindParam(':accountstatus', $acccountstatus);
                 // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was saved.</div>";
@@ -84,33 +86,54 @@
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
-                    <td>Name</td>
-                    <td><input type='text' name='name' class='form-control' /></td>
+                    <td>Username</td>
+                    <td><input type='text' name='username' class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Description</td>
-                    <td><textarea type='text' name='description' class='form-control' ></textarea></td>
+                    <td>Password</td>
+                    <td><input type='password' name='password' class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Price</td>
-                    <td><input type='text' name='price' class='form-control' /></td>
+                    <td>First Name</td>
+                    <td><input type='text' name='fname' class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Promotion Price</td>
-                    <td><input type='text' name='promo_price' class='form-control' /></td>
-                </tr>
                 <tr>
-                    <td>Manufacture Date</td>
-                    <td><input type='date' name='manu_date' class='form-control' /></td>
+                    <td>Last Name</td>
+                    <td><input type='text' name='lname' class='form-control' /></td>
                 </tr>
+                
                 <tr>
-                    <td>Expired Date</td>
-                    <td><input type='date' name='exp_date' class='form-control' /></td>
+                    <td>Gender</td>
+                    <td><input type='radio' name='gender' class='form-check-input' />
+                        <label class="form-check-label" value='Male'>Male</label>
+                        <input type='radio' name='gender' class='form-check-input' />
+                        <label class="form-check-label" value='Female'>Female</label>
+                  
+                  </td>
+
                 </tr>
+
+                <tr>
+                    <td>Date of Birth</td>
+                    <td><input type='date' name='dob' class='form-control' /></td>
+                </tr>
+
+                <tr>
+                    <td>Account Status</td>
+                    <td><input type='radio' name='accountstatus' class='form-check-input' />
+                        <label class="form-check-label" value='Active'>Active</label>
+                        <input type='radio' name='gender' class='form-check-input' />
+                        <label class="form-check-label" value='Inactive'>Inactive</label>
+                  
+                  </td>
+
+                </tr>
+
                 <tr>
                     <td></td>
                     <td>
-                        <input type='submit' value='Save' class='btn btn-primary' />
+                        <input type='submit' value='Register' class='btn btn-primary' />
                         <a href='index.php' class='btn btn-danger'>Back to read products</a>
                     </td>
                 </tr>
