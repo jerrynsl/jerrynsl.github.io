@@ -105,10 +105,10 @@
                 
                 <tr>
                     <td>Gender</td>
-                    <td><input type='radio' name='gender' class='form-check-input' />
-                        <label class="form-check-label" value='Male'>Male</label>
-                        <input type='radio' name='gender' class='form-check-input' />
-                        <label class="form-check-label" value='Female'>Female</label>
+                    <td><input type='radio' name='gender' value='Male' class='form-check-input' />
+                        <label class="form-check-label" >Male</label>
+                        <input type='radio' name='gender' value='female' class='form-check-input' />
+                        <label class="form-check-label" >Female</label>
                   
                   </td>
 
@@ -121,10 +121,10 @@
 
                 <tr>
                     <td>Account Status</td>
-                    <td><input type='radio' name='accountstatus' class='form-check-input' />
-                        <label class="form-check-label" value='Active'>Active</label>
-                        <input type='radio' name='gender' class='form-check-input' />
-                        <label class="form-check-label" value='Inactive'>Inactive</label>
+                    <td><input type='radio' name='accountstatus' value='active' class='form-check-input' />
+                        <label class="form-check-label" >Active</label>
+                        <input type='radio' name='accountstatus' value='inactive' class='form-check-input' />
+                        <label class="form-check-label" >Inactive</label>
                   
                   </td>
 

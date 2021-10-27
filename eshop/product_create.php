@@ -25,7 +25,7 @@
                 <a class="nav-link text-primary" href="product_create.php">Create Product</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-primary" href="customer_create.php" >Create Customer</a>
+                <a class="nav-link text-primary" href="create_customer.php" >Create Customer</a>
                 
               </li>
               <li class="nav-item ">
