@@ -66,11 +66,57 @@
                 $stmt->bindParam(':manufacture_date', $manu_date);
                 $stmt->bindParam(':expired_date', $exp_date);
                 // Execute the query
+
+                $flag=0;
+                $message='';
+
+                if(empty($name)){
+
+                    $flag=1;
+                    $message='Please enter item name.';
+
+                }
+
+                if(empty($price)){
+
+                    $flag=1;
+                    $message='Please enter price.';
+
+                }
+
+                if(empty($promo_price)){
+
+                    $flag=1;
+                    $message='Please enter promotion price.';
+
+                }
+                if(empty($manu_date)){
+
+                    $flag=1;
+                    $message='Please select manufactor date.';
+
+                }
+
+                if(empty($exp_date)){
+
+                    $flag=1;
+                    $message='Please select expired date.';
+
+                }
+
+                if ($flag==0){
+
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was saved.</div>";
                 } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                    $message= 'Unable to save record.';
                 }
+            
+            }else{
+
+                echo "<div class='alert alert-danger'>".$message[$i]."</div>";
+            
+            }
             }
             // show error
             catch (PDOException $exception) {

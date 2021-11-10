@@ -71,8 +71,11 @@
                 echo "</select>
                           
                           </td>
-                         <td><input type='number' name='quantity1' class='form-control' /></td> 
-                         </tr>";
+                         <td><input type='number' name='quantity1' class='form-control' min='1' /></td> 
+                         </tr>
+                         
+                         
+                         ";
 
 
                 echo "<tr>";
@@ -94,7 +97,7 @@
                                    
                  </td>
                  <td>
-                 <input type='number' name='quantity2' class='form-control' /></td> 
+                 <input type='number' name='quantity2' class='form-control' min='1'/></td> 
                 </tr>";
 
                 echo "<tr>";
@@ -113,7 +116,7 @@
                                                    
                  </td>
                  <td>
-                 <input type='number' name='quantity3' class='form-control' />
+                 <input type='number' name='quantity3' class='form-control' min='1' />
                  </td> 
                  </tr>";
 

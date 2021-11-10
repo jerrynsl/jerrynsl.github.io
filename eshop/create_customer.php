@@ -58,9 +58,84 @@
         $lname = $_POST['lname'];
         $gender = $_POST['gender'];
         $dob = $_POST['dob'];
+
+        $flag = 0;
+        $message = "";
+
+
+        if (!preg_match("/[a-zA-Z]/", $password) || !preg_match("/[0-9]/", $password)) {
+          $flag = 1;
+          $message = "Your password must contain alphabets and number.";
+        }
         
-       
-        
+        // else if (!preg_match("/[a-zA-Z0-9]{6,}/",$password)){
+
+        //   $flag=1;
+        //   $message = "Your password must contain alphabets and number.";
+
+        // }
+        // $checkAl = preg_match("/[a-zA-Z]/",$password);
+        // echo $checkAl;
+        // if(!preg_match("[a-zA-Z]",$password) ){
+        //   echo "<div class='alert alert-danger'>Your password must contain alphabets.</div>";
+
+        // }
+
+        if (empty($_POST['username'])) {
+
+          $flag = 1;
+          
+          $message = "Please insert your username.";
+        }
+
+        if (empty($email)) {
+          
+          $flag = 1;
+          
+          $message = "Please insert your email.";
+        }
+
+        if (empty($fname)) {
+          
+          $flag = 1;
+          
+          $message = "Please insert your first name.";
+        }
+
+        if (empty($lname)) {
+          
+          $flag = 1;
+          
+          $message = "Please insert your last name.";
+        }
+
+
+        if(empty($gender)){
+
+          $flag = 1;
+
+          $message = "Please select gender.";
+
+        }
+
+        if(empty($dob)){
+
+          $flag = 1;
+
+          $message = "Please select your date of birth.";
+
+        }
+
+        if ($password == $confirmpassword) {
+
+          $password = md5($password);
+
+         
+        } else {
+          $flag = 1;
+          $message = "Password is not same as Confirm Password.";
+        }
+
 
         // bind the parameters
         $stmt->bindParam(':username', $username);
@@ -70,46 +145,24 @@
         $stmt->bindParam(':lname', $lname);
         $stmt->bindParam(':gender', $gender);
         $stmt->bindParam(':dob', $dob);
+    
 
-        $colour = "alert alert-danger";
-        $flag = 0;
-        $message = "";
-       
+      
 
-        if(!preg_match("/[a-zA-Z]/",$password) || !preg_match("/[0-9]/",$password)){
-          $flag = 1;
-          $message ="Your password must contain alphabets and number.";
+        if($flag == 0) {
 
-        }
-        // $checkAl = preg_match("/[a-zA-Z]/",$password);
-        // echo $checkAl;
-        // if(!preg_match("[a-zA-Z]",$password) ){
-        //   echo "<div class='alert alert-danger'>Your password must contain alphabets.</div>";
-
-        // }
-
-        else if ($password == $confirmpassword) {
-          
-          $password = md5($password);
-          
           if ($stmt->execute()) {
-            
+
             echo "<div class='alert alert-success'>Record was saved.</div>";
 
           } else {
             $flag = 1;
             $message = "Unable to save record.";
           }
-        } else {
-          $flag = 1;
-          $message = "Password is not same as Confirm Password.";
-        }
+         
+        }else {
 
-        if($flag == 1){
-
-          echo "<div class='alert alert-danger'>".$message."</div>";
-
-
+          echo "<div class='alert alert-danger'>" . $message . "</div>";
 
         }
         // Execute the query
