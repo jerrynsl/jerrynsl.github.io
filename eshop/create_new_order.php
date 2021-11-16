@@ -21,16 +21,83 @@
         // include database connection
         include 'config/database.php';
 
-        $q = "SELECT id, name, price FROM products";
+        $qp = "SELECT id, name, price FROM products";
 
-        $stmt = $con->prepare($q);
+        $stmt = $con->prepare($qp);
         $stmt->execute();
 
-        $stmt2 = $con->prepare($q);
+        $qc = "SELECT username, email, fname, lname FROM customers";
+
+        $stmt2 = $con->prepare($qc);
         $stmt2->execute();
 
-        $stmt3 = $con->prepare($q);
-        $stmt3->execute();
+        if ($_POST) {
+
+            $flag=0;
+            $message='';
+    
+            if(empty($_POST['customer'])){
+    
+                $flag=1;
+                $message='Please select customer.';
+    
+            }
+    
+            if(empty($_POST['product'][0])){
+    
+                $flag=1;
+                $message='Please select first item.';
+    
+            }
+            if(empty($_POST['quantity'][0])){
+
+                $flag=1;
+                $message='Please enter the quantity.';
+            }
+    
+            try {
+                $username = $_POST['customer'];
+    
+                $order_create = date('Y-m-d');
+    
+                // insert query
+                $qs = "INSERT INTO order_summary SET username=:username, order_create=:order_create";
+                // prepare query for execution
+                $stmt = $con->prepare($qs);
+    
+                // bind the parameters
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':order_create', $order_create);
+    
+                if($flag==0){
+                if ($stmt->execute()) {
+                    $last_id = $con->lastInsertId();
+                    for ($c = 0; $c < 3; $c++) {
+                        $qd = 'INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity';
+                        $stmt = $con->prepare($qd);
+                        $stmt->bindParam(':order_id', $last_id);
+                        $stmt->bindParam(':product_id', $_POST['product'][$c]);
+                        $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
+    
+    
+                        $stmt->execute();
+                    
+                    
+                    }
+                    echo "<div class='alert alert-success'>Record was saved. Last Insert ID is $last_id</div>";
+                } else {
+                    $message='Unable to save record.';
+                }
+            }else{
+    
+                echo "<div class='alert alert-danger'>".$message."</div>";
+            }
+        }
+            // show error
+            catch (PDOException $exception) {
+                die('ERROR: ' . $exception->getMessage());
+            }
+        }
 
         ?>
 
@@ -43,7 +110,23 @@
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Customer Name:</td>
-                    <td><input type='text' name='customer_name' class='form-control' /></td>
+                    <td>
+                    <?php
+                    
+                    echo '<select class="fs-4 rounded" id="" name="customer">';
+                    echo  '<option selected></option>';
+
+                    while($row = $stmt2->fetch(PDO::FETCH_ASSOC)){
+                    echo "<option value='" . $row['username'] ."'>" . $row['fname']." ". $row['lname'] ."(".$row['email'].")</option>";
+                  
+                    }
+                    
+                    echo "</select>";
+                    
+                    ?>
+
+
+                    </td>
                 </tr>
                 <tr>
                     <th>Products</th>
@@ -54,77 +137,37 @@
                 <?php
 
 
-                echo "<tr>";
-                echo '<td><select class="fs-4 rounded" id="" name="product_name1">';
-                echo  '<option class="bg-white" selected></option>';
-
-
+                $pArrayID = array();
+                $pArrayName = array();
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 
-                    extract($row);
-
-                    echo "<option class='bg-white' value='" . $row['name'] . "'>" . $row['name'] . "</option>";
+                    array_push($pArrayID, $row['id']);
+                    array_push($pArrayName, $row['name']);
                 }
 
-                echo "</select>
+
+                for ($x = 0; $x <= 2; $x++) {
+
+                    echo "<tr>";
+                    echo '<td><select class="fs-4 rounded" id="" name="product[]">';
+                    echo  '<option class="bg-white" selected></option>';
+
+                    for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
+                        echo "<option value='" . $pArrayID[$pCount] . "'>" . $pArrayName[$pCount] . "</option>";
+                    }
+
+                    echo "</select>
                           
-                          </td>
-                         <td><input type='number' name='quantity1' class='form-control' min='1' /></td> 
-                         </tr>
-                         
-                         
-                         ";
-
-
-                echo "<tr>";
-                echo '<td><select class="fs-4 rounded" id="" name="product_name2">';
-                echo  '<option class="bg-white" selected></option>';
-
-
-
-
-                while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-
-
-                    extract($row2);
-
-                    echo "<option class='bg-white' value='" . $row2['name'] . "'>" . $row2['name'] . "</option>";
+                        </td>
+                         <td>
+                         <input type='number' name='quantity[]' class='form-control' min='1' max='5'/>
+                         </td> 
+                         </tr>";
                 }
-
-                echo "</select>
-                                   
-                 </td>
-                 <td>
-                 <input type='number' name='quantity2' class='form-control' min='1'/></td> 
-                </tr>";
-
-                echo "<tr>";
-                echo '<td><select class="fs-4 rounded" id="" name="product_name3">';
-                echo  '<option class="bg-white" selected></option>';
-
-                while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)) {
-
-
-                    extract($row3);
-
-                    echo "<option class='bg-white' value='" . $row3['name'] . "'>" . $row3['name'] . "</option>";
-                }
-
-                echo "</select>
-                                                   
-                 </td>
-                 <td>
-                 <input type='number' name='quantity3' class='form-control' min='1' />
-                 </td> 
-                 </tr>";
-
 
                 ?>
-
-
-
 
                 <tr>
                     <td></td>
@@ -143,106 +186,6 @@
     </div>
 
 
-    <?php
-
-
-
-
-    if ($_POST) {
-
-        $q1 = "SELECT id, name, price FROM products WHERE name='" . $_POST['product_name1'] . "'";
-        $stmt = $con->prepare($q1);
-        $stmt->execute();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-            $p1 = $row['price'];
-        }
-
-        $q2 = "SELECT id, name, price FROM products WHERE name='" . $_POST['product_name2'] . "'";
-        $stmt = $con->prepare($q2);
-        $stmt->execute();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-            $p2 = $row['price'];
-        }
-
-        $q3 = "SELECT id, name, price FROM products WHERE name='" . $_POST['product_name3'] . "'";
-        $stmt = $con->prepare($q3);
-        $stmt->execute();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-            $p3 = $row['price'];
-        }
-
-
-        try {
-            $product_name1 = $_POST['product_name1'];
-            $quantity1 = $_POST['quantity1'];
-            $price1 = $p1 * $_POST['quantity1'];
-            $product_name2 = $_POST['product_name2'];
-            $quantity2 = $_POST['quantity2'];
-            $price2 = $p2 * $_POST['quantity2'];
-            $product_name3 = $_POST['product_name3'];
-            $quantity3 = $_POST['quantity3'];
-            $price3 = $p3 * $_POST['quantity3'];
-            // insert query
-            $qd = "INSERT INTO order_details SET product_name1=:product_name1, quantity1=:quantity1, price1=:price1, product_name2=:product_name2, quantity2=:quantity2, price2=:price2,product_name3=:product_name3, quantity3=:quantity3, price3=:price3";
-            // prepare query for execution
-            $stmt = $con->prepare($qd);
-
-            // bind the parameters
-            $stmt->bindParam(':product_name1', $product_name1);
-            $stmt->bindParam(':quantity1', $quantity1);
-            $stmt->bindParam(':price1', $price1);
-            $stmt->bindParam(':product_name2', $product_name2);
-            $stmt->bindParam(':quantity2', $quantity2);
-            $stmt->bindParam(':price2', $price2);
-            $stmt->bindParam(':product_name3', $product_name3);
-            $stmt->bindParam(':quantity3', $quantity3);
-            $stmt->bindParam(':price3', $price3);
-
-            if ($stmt->execute()) {
-                echo "<div class='alert alert-success'>Record was saved.</div>";
-            } else {
-                echo "<div class='alert alert-danger'>Unable to save record.</div>";
-            }
-        }
-        // show error
-        catch (PDOException $exception) {
-            die('ERROR: ' . $exception->getMessage());
-        }
-
-        try {
-            $customer_name = $_POST['customer_name'];
-            $total_amount = $price1 + $price2 + $price3;
-            $order_create = date('Y-m-d');
-
-            // insert query
-            $qs = "INSERT INTO order_summary SET customer_name=:customer_name, total_amount=:total_amount, order_create=:order_create";
-            // prepare query for execution
-            $stmt = $con->prepare($qs);
-
-            // bind the parameters
-            $stmt->bindParam(':customer_name', $customer_name);
-            $stmt->bindParam(':total_amount', $total_amount);
-            $stmt->bindParam(':order_create', $order_create);
-
-            if ($stmt->execute()) {
-                echo "<div class='alert alert-success'>Record was saved.</div>";
-            } else {
-                echo "<div class='alert alert-danger'>Unable to save record.</div>";
-            }
-        }
-        // show error
-        catch (PDOException $exception) {
-            die('ERROR: ' . $exception->getMessage());
-        }
-
-    }
-
-
-
-    ?>
 
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>

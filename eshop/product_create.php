@@ -114,7 +114,7 @@
             
             }else{
 
-                echo "<div class='alert alert-danger'>".$message[$i]."</div>";
+                echo "<div class='alert alert-danger'>".$message."</div>";
             
             }
             }
