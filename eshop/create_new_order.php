@@ -56,6 +56,7 @@
             }
     
             try {
+                
                 $username = $_POST['customer'];
     
                 $order_create = date('Y-m-d');
@@ -79,9 +80,11 @@
                         $stmt->bindParam(':product_id', $_POST['product'][$c]);
                         $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
     
-    
+                        if(!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])){
+
                         $stmt->execute();
                     
+                        }
                     
                     }
                     echo "<div class='alert alert-success'>Record was saved. Last Insert ID is $last_id</div>";
