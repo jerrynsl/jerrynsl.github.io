@@ -42,7 +42,7 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // values to fill up our form
-            
+
             $orderDetail_id = $row['orderDetail_id'];
             $order_id = $row['order_id'];
             $product_id = $row['product_id'];
@@ -83,7 +83,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <a href='read_order.php' class='btn btn-danger'>Back to read order</a>
+                    <a href='order_read.php' class='btn btn-danger'>Back to read order</a>
                 </td>
             </tr>
         </table>
