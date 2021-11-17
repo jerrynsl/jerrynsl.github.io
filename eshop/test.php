@@ -29,7 +29,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT orderDetail_id, order_id, product_id, quantity FROM order_details WHERE order_id=:order_id";
+            $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id=:order_id";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -59,14 +59,18 @@
     
                 // retrieve our table contents
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                    
                     // extract row
                     // this will make $row['firstname'] to just $firstname only
                     extract($row);
+                  
+
                     // creating new table row per record
                     echo "<tr>";
                     echo "<td>".$row['orderDetail_id']."</td>";
                     echo "<td>".$row['order_id']."</td>";
-                    echo "<td>".$row['product_id']."</td>";
+                    echo "<td>".$row['name']."</td>";
                     echo "<td>".$row['quantity']."</td>";
                     
                     echo "</tr>";
