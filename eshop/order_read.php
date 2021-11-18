@@ -25,7 +25,7 @@
         // delete message prompt will be here
 
         // select all data
-        $query = "SELECT * FROM order_summary ORDER BY order_id DESC";
+        $query = "SELECT order_summary.order_id, customers.fname, customers.lname, order_summary.order_create FROM order_summary INNER JOIN customers ON order_summary.username = customers.username ORDER BY order_id DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
 
@@ -43,7 +43,7 @@
             //creating our table heading
             echo "<tr>";
             echo "<th>Order ID</th>";
-            echo "<th>Username</th>";
+            echo "<th>Customer Name</th>";
             echo "<th>Order Create</th>";
            
             echo "</tr>";
@@ -56,11 +56,11 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>".$row['order_id']."</td>";
-                echo "<td>".$row['username']."</td>";
+                echo "<td>".$row['fname']." ".$row['lname']."</td>";
                 echo "<td>".$row['order_create']."</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='test.php?id=".$row['order_id']."' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='order_read_one.php?id=".$row['order_id']."' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='order_update.php?id=".$row['order_id']."' class='btn btn-primary m-r-1em'>Edit</a>";

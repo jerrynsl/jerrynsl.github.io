@@ -29,7 +29,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT orderDetail_id, order_id, product_id, quantity FROM order_details WHERE order_id=:order_id";
+            $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id=:order_id";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -41,17 +41,46 @@
             $num = $stmt->rowCount();
 
             // store retrieved row to a variable
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
 
             // values to fill up our form
-            if($num>0){
-            $orderDetail_id = $row['orderDetail_id'];
-            $order_id = $row['order_id'];
-            $product_id = $row['product_id'];
-            $quantity = $row['quantity'];    
-            
-        
-        
+            if ($num > 0) {
+
+                echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+    
+                //creating our table heading
+                echo "<tr>";
+                echo "<th>Order Detail ID</th>";
+                echo "<th>Order ID</th>";
+                echo "<th>Product ID</th>";
+                echo "<th>Quantuty</th>";
+               
+                echo "</tr>";
+    
+                // retrieve our table contents
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                    
+                    // extract row
+                    // this will make $row['firstname'] to just $firstname only
+                    extract($row);
+                  
+
+                    // creating new table row per record
+                    echo "<tr>";
+                    echo "<td>".$row['orderDetail_id']."</td>";
+                    echo "<td>".$row['order_id']."</td>";
+                    echo "<td>".$row['name']."</td>";
+                    echo "<td>".$row['quantity']."</td>";
+                    
+                    echo "</tr>";
+                }
+                echo "<tr>";
+                
+                echo "<td colspan='4'><a href='order_read.php' class='btn btn-danger'>Back to read order</a>";
+                echo "</td>";
+                echo "</tr>";
+                echo "</table>";
         }
 
             // shorter way to do that is extract($row)
@@ -67,31 +96,7 @@
 
         <!-- HTML read one record table will be here -->
         <!--we have our html table here where the record will be displayed-->
-        <table class='table table-hover table-responsive table-bordered'>
-            <tr>
-                <td>Order Detail ID</td>
-                <td><?php for($x=0;$x<2;$x++){echo htmlspecialchars($orderDetail_id[$x], ENT_QUOTES);}  ?></td>
-            </tr>
-            <tr>
-                <td>Order ID</td>
-                <td><?php echo htmlspecialchars($order_id, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Product ID</td>
-                <td><?php echo htmlspecialchars($product_id, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Quantity</td>
-                <td><?php echo htmlspecialchars($quantity, ENT_QUOTES);  ?></td>
-            </tr> 
-            
-            <tr>
-                <td></td>
-                <td>
-                    <a href='order_read.php' class='btn btn-danger'>Back to read order</a>
-                </td>
-            </tr>
-        </table>
+       
 
 
 
