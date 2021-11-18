@@ -41,47 +41,47 @@
             $num = $stmt->rowCount();
 
             // store retrieved row to a variable
-            
+
 
             // values to fill up our form
             if ($num > 0) {
 
                 echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
-    
+
                 //creating our table heading
                 echo "<tr>";
                 echo "<th>Order Detail ID</th>";
                 echo "<th>Order ID</th>";
                 echo "<th>Product ID</th>";
                 echo "<th>Quantuty</th>";
-               
+
                 echo "</tr>";
-    
+
                 // retrieve our table contents
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
-                    
+
                     // extract row
                     // this will make $row['firstname'] to just $firstname only
                     extract($row);
-                  
+
 
                     // creating new table row per record
                     echo "<tr>";
-                    echo "<td>".$row['orderDetail_id']."</td>";
-                    echo "<td>".$row['order_id']."</td>";
-                    echo "<td>".$row['name']."</td>";
-                    echo "<td>".$row['quantity']."</td>";
-                    
+                    echo "<td>" . $row['orderDetail_id'] . "</td>";
+                    echo "<td>" . $row['order_id'] . "</td>";
+                    echo "<td>" . $row['name'] . "</td>";
+                    echo "<td>" . $row['quantity'] . "</td>";
+
                     echo "</tr>";
                 }
                 echo "<tr>";
-                
+
                 echo "<td colspan='4'><a href='order_read.php' class='btn btn-danger'>Back to read order</a>";
                 echo "</td>";
                 echo "</tr>";
                 echo "</table>";
-        }
+            }
 
             // shorter way to do that is extract($row)
         }
@@ -96,7 +96,7 @@
 
         <!-- HTML read one record table will be here -->
         <!--we have our html table here where the record will be displayed-->
-       
+
 
 
 

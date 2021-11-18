@@ -17,7 +17,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav justify-content-end ">
+            <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link active text-primary" aria-current="page" href="home.php">Home</a>
               </li>
@@ -25,8 +25,19 @@
                 <a class="nav-link text-primary" href="product_create.php">Create Product</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-primary" href="create_customer.php" >Create Customer</a>
-                
+                <a class="nav-link text-primary" href="create_customer.php" >Create Customer</a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="create_new_order.php" >Create New Order</a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="product_read.php">Read Product</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="read_customer.php" >Read Customer</a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="order_read.php" >Read Order</a>  
               </li>
               <li class="nav-item ">
                 <a class="nav-link text-primary" href="contact.php">Contact Us</a>
@@ -35,7 +46,9 @@
             
           </div>
         </div>
+        
       </nav>
+      </div>
         <div class="page-header">
             <h1>Contact us</h1>
         </div>
@@ -47,7 +60,7 @@
 
 
 
-    </div>
+    
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>

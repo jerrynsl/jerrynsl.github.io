@@ -5,14 +5,14 @@
     <title>PDO - Create a Record - PHP CRUD Tutorial</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  
+
 </head>
 
 <body>
     <!-- container -->
     <div class="container">
+    
 
-        
 
         <div class="page-header">
             <h1>Read Order</h1>
@@ -45,7 +45,7 @@
             echo "<th>Order ID</th>";
             echo "<th>Customer Name</th>";
             echo "<th>Order Create</th>";
-           
+
             echo "</tr>";
 
             // retrieve our table contents
@@ -55,18 +55,18 @@
                 extract($row);
                 // creating new table row per record
                 echo "<tr>";
-                echo "<td>".$row['order_id']."</td>";
-                echo "<td>".$row['fname']." ".$row['lname']."</td>";
-                echo "<td>".$row['order_create']."</td>";
+                echo "<td>" . $row['order_id'] . "</td>";
+                echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
+                echo "<td>" . $row['order_create'] . "</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='order_read_one.php?id=".$row['order_id']."' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='order_read_one.php?id=" . $row['order_id'] . "' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='order_update.php?id=".$row['order_id']."' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='order_update.php?id=" . $row['order_id'] . "' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_product(".$row['order_id'].");'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_product(" . $row['order_id'] . ");'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -84,7 +84,7 @@
     </div> <!-- end .container -->
 
     <!-- confirm delete record will be here -->
-   
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 
