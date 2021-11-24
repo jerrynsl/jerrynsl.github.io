@@ -186,10 +186,11 @@
                          <td>";
                          if($_POST){
                              for($quantity;$quantity<count($_POST['quantity']);$quantity++){
+                                 
                             $quantity_selected = $quantity == $_POST['quantity'][$quantity] ? 'selected' : '';
                         }
                         }
-                         echo "<input type='number' name='quantity[]' class='form-control' min='1' max='5'". $quantity_selected."/>
+                         echo "<input type='number' name='quantity[]' class='form-control' min='1' max='5'/>
                          </td> 
                          </tr>";
                 

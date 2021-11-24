@@ -229,7 +229,7 @@
           <td></td>
           <td>
             <input type='submit' value='Register' class='btn btn-primary' />
-            <a href='index.php' class='btn btn-danger'>Back to read products</a>
+            <a href='customer_login.php' class='btn btn-danger'>Back to Login Page</a>
           </td>
         </tr>
       </table>

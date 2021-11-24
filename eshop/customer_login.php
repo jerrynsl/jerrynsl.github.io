@@ -17,7 +17,7 @@
           // include database connection
         include 'config/database.php';
 
-        $q='SELECT username, password from customers';
+        $q='SELECT username, password, accountstatus from customers';
         $stmt = $con->prepare($q);
         $stmt->execute();
 
@@ -28,7 +28,18 @@
 
           if ($_POST['username']==$row['username'] && md5($_POST['password'])==$row['password']){
 
-              header("Location:home.php");
+             
+
+              if($row['accountstatus']=='Active'){
+
+                header("Location:home.php");
+
+
+              }else{
+                  $flag=1;
+                  $message='Please tell admin to activate your account.';
+
+              }
 
           }else{
 
