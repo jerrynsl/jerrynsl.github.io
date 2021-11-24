@@ -31,6 +31,7 @@
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             array_push($pArrayID, $row['id']);
             array_push($pArrayName, $row['name']);
+            
         }
 
         $qc = "SELECT username, email, fname, lname FROM customers";
@@ -141,8 +142,8 @@
                         
                         while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                             
-                            
-                            $selected = $row['username'] == $_POST['customer'] ? 'selected' : '';
+                            if($_POST){
+                            $selected = $row['username'] == $_POST['customer'] ? 'selected' : '';}
 
                             echo "<option value='" . $row['username'] . "' ".$selected.">" . $row['fname'] . " " . $row['lname'] . "(" . $row['email'] . ")</option>";
                         }
@@ -167,15 +168,28 @@
                     echo '<td><select class="fs-4 rounded" id="" name="product[]">';
                     echo  '<option class="bg-white" selected></option>';
 
+                 
+
                     for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
-                        echo "<option value='" . $pArrayID[$pCount] . "'>" . $pArrayName[$pCount] . "</option>";
+
+                        if($_POST){
+                            $product_selected = $row['product'][$pCount] == $_POST['product'][$pCount] ? 'selected' : '';}
+                        
+
+                        echo "<option value='" . $pArrayID[$pCount] . "'".$product_selected.">" . $pArrayName[$pCount] ."</option>";
                     }
 
                     echo "</select>
                           
+
                         </td>
-                         <td>
-                         <input type='number' name='quantity[]' class='form-control' min='1' max='5'/>
+                         <td>";
+                         if($_POST){
+                             for($quantity;$quantity<count($_POST['quantity']);$quantity++){
+                            $quantity_selected = $quantity == $_POST['quantity'][$quantity] ? 'selected' : '';
+                        }
+                        }
+                         echo "<input type='number' name='quantity[]' class='form-control' min='1' max='5'". $quantity_selected."/>
                          </td> 
                          </tr>";
                 
