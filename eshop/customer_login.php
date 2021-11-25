@@ -49,6 +49,14 @@
           }
 
 
+          if ($_POST['username']!==$row['username']){
+
+            $flag=1;
+            $message='Username is not exists.';
+
+          }
+
+
         }
 
         
