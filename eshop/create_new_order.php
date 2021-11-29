@@ -124,9 +124,6 @@
         <!-- html form here where the product information will be entered -->
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
 
-
-
-
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Customer Name:</td>
@@ -168,7 +165,7 @@
                 if ($_POST) {
                     
 
-                    for ($y = 0; $y < count($_POST['product']); $y++) {
+                    for ($y = 0; $y <= count($_POST['product']); $y++) {
                         if (empty($_POST['product'][$y])  && empty($_POST['quantity'][$y])) {
 
                             unset($_POST['product'][$y]);
