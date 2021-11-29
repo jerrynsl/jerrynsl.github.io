@@ -59,8 +59,6 @@
 
         }
 
-        
-
         if (empty($_POST['username'])) {
 
           $flag = 1;

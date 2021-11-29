@@ -31,7 +31,6 @@
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             array_push($pArrayID, $row['id']);
             array_push($pArrayName, $row['name']);
-            
         }
 
         $qc = "SELECT username, email, fname, lname FROM customers";
@@ -47,26 +46,24 @@
             $fail_flag = 0;
             $message = '';
 
-            
+
 
             for ($a = 0; $a < count($_POST['product']); $a++) {
                 if (!empty($_POST['product'][$a]) && !empty($_POST['quantity'][$a])) {
                     $pflag++; //$pflag=1
+
                 }
                 if (empty($_POST['product'][$a]) || empty($_POST['quantity'][$a])) {
                     $fail_flag++; //$pflag=1
                 }
-              
-              
-            } 
+            }
 
             // count(array) !== count(array_unique());
 
-            if(count($_POST['product'])!== count(array_unique($_POST['product']))){
+            if (count($_POST['product']) !== count(array_unique($_POST['product']))) {
 
                 $flag = 1;
                 $message = 'Items are duplicate.';
-
             }
 
             if (empty($_POST['customer'])) {
@@ -75,7 +72,7 @@
             } else if ($pflag == 0 || $fail_flag > 0) {
                 $flag = 1;
                 $message = 'Please select item and quantity.';
-            } 
+            }
 
             try {
 
@@ -135,19 +132,20 @@
                     <td>Customer Name:</td>
                     <td>
                         <?php
-                        
-                        $selected='';
+
+                        $selected = '';
                         echo '<select class="fs-4 rounded" id="" name="customer">';
                         echo  '<option selected></option>';
-                        
-                        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                            
-                            if($_POST){
-                            $selected = $row['username'] == $_POST['customer'] ? 'selected' : '';}
 
-                            echo "<option value='" . $row['username'] . "' ".$selected.">" . $row['fname'] . " " . $row['lname'] . "(" . $row['email'] . ")</option>";
+                        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+
+                            if ($_POST) {
+                                $selected = $row['username'] == $_POST['customer'] ? 'selected' : '';
+                            }
+
+                            echo "<option value='" . $row['username'] . "' " . $selected . ">" . $row['fname'] . " " . $row['lname'] . "(" . $row['email'] . ")</option>";
                         }
-                    
+
                         echo "</select>";
 
                         ?>
@@ -162,46 +160,68 @@
                 </tr>
 
                 <?php
-                
+
+
+                // $product_count = $_POST ? count($_POST['product']) : 1;
+                $arrayP = array('');
+
+                if ($_POST) {
+                    
+
+                    for ($y = 0; $y < count($_POST['product']); $y++) {
+                        if (empty($_POST['product'][$y])  && empty($_POST['quantity'][$y])) {
+
+                            unset($_POST['product'][$y]);
+                            unset($_POST['quantity'][$y]);
+                        }
+                    $arrayP = $_POST['product'];    
+
+                    }
+                }
+                echo '<pre>';
+                var_dump($_POST);
+                echo '</pre>';
+                foreach ($arrayP as $pRow => $pID) {
 
                     echo "<tr class='pRow'>";
-                    echo '<td><select class="fs-4 rounded" id="" name="product[]">';
-                    echo  '<option class="bg-white" selected></option>';
 
-                 
+                    echo '<td><select class="fs-4 rounded" id="" name="product[]">';
+                    echo  '<option class="bg-white"></option>';
+
+                    $pList = $_POST ? $_POST['product'] : '[]';
 
                     for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
 
-                        if($_POST){
-                            $product_selected = $row['product'][$pCount] == $_POST['product'][$pCount] ? 'selected' : '';}
-                        
+                        $product_selected = $pArrayID[$pCount] == $pList[$pRow] ? 'selected' : '';
 
-                        echo "<option value='" . $pArrayID[$pCount] . "'".$product_selected.">" . $pArrayName[$pCount] ."</option>";
+
+
+                        echo "<option value='" . $pArrayID[$pCount] . "' $product_selected>" . $pArrayName[$pCount] . "</option>";
                     }
 
-                    echo "</select>
-                          
+                    echo "</select>";
 
-                        </td>
-                         <td>";
-                         if($_POST){
-                             for($quantity;$quantity<count($_POST['quantity']);$quantity++){
-                                 
-                            $quantity_selected = $quantity == $_POST['quantity'][$quantity] ? 'selected' : '';
-                        }
-                        }
-                         echo "<input type='number' name='quantity[]' class='form-control' min='1' max='5'/>
-                         </td> 
-                         </tr>";
+                    echo "<td>";
+                    echo '<select class="w-100 fs-4 rounded" name="quantity[]" >';
+                    echo "<option></option>";
+                    for ($quantity = 1; $quantity <= 5; $quantity++) {
+                        $selected_quantity = $quantity == $_POST['quantity'][$pRow] ? 'selected' : '';
+                        echo "<option value='$quantity' $selected_quantity>$quantity</option>";
+                    }
+                    echo '</td>';
+                }
+
+            
+
                 
 
                 ?>
 
                 <tr>
                     <td>
-                    <input type='button' value='Add More' class='add_one btn btn-primary' />
-                    <input type='button' value='Delete'  class='delete_one btn btn-danger' />
-                       
+                        <input type='button' value='Add More' class='add_one btn btn-primary' />
+                        <input type='button' value='Delete' class='delete_one btn btn-danger' />
+
                     </td>
                     <td>
                         <input type='submit' value='Save' class='btn btn-primary' />
@@ -217,7 +237,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 
     <script>
-        document.addEventListener('click', function (event) {
+        document.addEventListener('click', function(event) {
             if (event.target.matches('.add_one')) {
                 var element = document.querySelector('.pRow');
                 var clone = element.cloneNode(true);
@@ -231,7 +251,6 @@
                 }
             }
         }, false);
-
     </script>
 </body>
 
