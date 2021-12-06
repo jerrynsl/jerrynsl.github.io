@@ -10,7 +10,7 @@
 <body>
     <!-- container -->
     <div class="container">
-
+        
         <div class="page-header">
             <h1>Create New Order</h1>
         </div>
@@ -64,6 +64,7 @@
 
                 $flag = 1;
                 $message = 'Items are duplicate.';
+                
             }
 
             if (empty($_POST['customer'])) {
@@ -163,21 +164,23 @@
                 $arrayP = array('');
 
                 if ($_POST) {
-                    
-
                     for ($y = 0; $y <= count($_POST['product']); $y++) {
                         if (empty($_POST['product'][$y])  && empty($_POST['quantity'][$y])) {
 
                             unset($_POST['product'][$y]);
                             unset($_POST['quantity'][$y]);
                         }
-                    $arrayP = $_POST['product'];    
-
+                       
+                    if(count($_POST['product'])==0){
+                        $arrayP = array('');
+                    }else{
+                        $arrayP = $_POST['product']; 
+                    }   
                     }
                 }
-                echo '<pre>';
-                var_dump($_POST);
-                echo '</pre>';
+                // echo '<pre>';
+                // var_dump($_POST);
+                // echo '</pre>';
                 foreach ($arrayP as $pRow => $pID) {
 
                     echo "<tr class='pRow'>";
@@ -199,7 +202,7 @@
                     echo "</select>";
 
                     echo "<td>";
-                    echo '<select class="w-100 fs-4 rounded" name="quantity[]" >';
+                    echo '<select class="w-25 fs-4 rounded" name="quantity[]" >';
                     echo "<option></option>";
                     for ($quantity = 1; $quantity <= 5; $quantity++) {
                         $selected_quantity = $quantity == $_POST['quantity'][$pRow] ? 'selected' : '';

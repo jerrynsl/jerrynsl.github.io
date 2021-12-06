@@ -103,6 +103,23 @@
                     $message='Please select expired date.';
 
                 }
+                if (!is_numeric($price) || !is_numeric($promo_price)) {
+                    $flag = 1;
+                    $message = "Price must be numerical.";
+                } 
+                
+                if ($price < 0 || $promo_price < 0) {
+                    $flag = 1;
+                    $message = "Price cannot be negative.";
+                } 
+                if ($promo_price > $price) {
+                    $flag = 1;
+                    $message = "Promo Price cannot bigger than Normal Price";
+                } 
+                if ($manu_date > $exp_date) {
+                    $flag = 1;
+                    $message = "Expired date must be after Manufacture date";
+                }
 
                 if ($flag==0){
 
@@ -157,7 +174,7 @@
                     <td></td>
                     <td>
                         <input type='submit' value='Save' class='btn btn-primary' />
-                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                        <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
                     </td>
                 </tr>
             </table>

@@ -12,8 +12,7 @@
     <!-- container -->
     <div class="container">
     
-
-
+    <?php include 'navbar.php';?>
         <div class="page-header">
             <h1>Read Order</h1>
         </div>
@@ -69,6 +68,7 @@
                 echo "<a href='#' onclick='delete_product(" . $row['order_id'] . ");'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
+
             }
 
 

@@ -40,21 +40,32 @@
 
             $num = $stmt->rowCount();
 
-            // store retrieved row to a variable
+            $qc = "SELECT order_summary.order_id, customers.fname, customers.lname, order_summary.order_create FROM order_summary INNER JOIN customers ON order_summary.username = customers.username WHERE order_id=$id";
 
+            $stmt2 = $con->prepare($qc);
+            $stmt2->execute();
+            
+            // store retrieved row to a variable
+            $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $fname = $row2['fname'];
+            $lname = $row2['lname'];
 
             // values to fill up our form
             if ($num > 0) {
 
-                echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
-
-                //creating our table heading
+                echo "<table class='table table-hover table-responsive table-bordered'>"; 
                 echo "<tr>";
-                echo "<th>Order Detail ID</th>";
-                echo "<th>Order ID</th>";
-                echo "<th>Product ID</th>";
-                echo "<th>Quantuty</th>";
-
+                echo "<th>Order ID</th><td>" . $id . "</td>";
+                echo "</tr>";
+                echo "<tr>";
+                echo "<th>Customer Name</th><td>".$fname." ".$lname."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                echo "</table>";
+                
+                echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+                echo "<th>Product Name</th>";
+                echo "<th>Quantity</th>";
                 echo "</tr>";
 
                 // retrieve our table contents
@@ -68,8 +79,6 @@
 
                     // creating new table row per record
                     echo "<tr>";
-                    echo "<td>" . $row['orderDetail_id'] . "</td>";
-                    echo "<td>" . $row['order_id'] . "</td>";
                     echo "<td>" . $row['name'] . "</td>";
                     echo "<td>" . $row['quantity'] . "</td>";
 

@@ -12,7 +12,7 @@
     <!-- container -->
     <div class="container">
 
-        
+    <?php include 'navbar.php';?>
 
         <div class="page-header">
             <h1>Read Customer</h1>
@@ -72,7 +72,7 @@
                 echo "<td><a href='read_one_customer.php?id={$username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='product_update.php?id={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='update_customer.php?id={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_product({$username});'  class='btn btn-danger'>Delete</a>";
