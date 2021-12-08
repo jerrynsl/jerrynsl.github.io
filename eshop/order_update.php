@@ -46,8 +46,8 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT * FROM products WHERE id = ? LIMIT 0,1";
-            $stmt = $con->prepare($query);
+            $qod = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id = ? LIMIT 0,1";
+            $stmt = $con->prepare($qod);
 
             // this is the first question mark
             $stmt->bindParam(1, $id);
@@ -59,12 +59,21 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // values to fill up our form
-            $name = $row['name'];
-            $description = $row['description'];
-            $price = $row['price'];
-            $promo_price = $row['promotion_price'];
-            $manu_date = $row['manufacture_date'];
-            $exp_date = $row['expired_date'];
+            $product_name = $row['name'];
+            $product_id = $row['product_id'];
+            $selected_quantity = $row['quantity'];
+
+            $qp = "SELECT id, name, price FROM products";
+             $stmt2 = $con->prepare($qp);
+            $stmt2->execute();
+
+            $pArrayID = array();
+            $pArrayName = array();
+
+            while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                array_push($pArrayID, $row2['id']);
+                array_push($pArrayName, $row2['name']);
+            }
         }
 
         // show error
@@ -87,6 +96,7 @@
                   SET name=:name, description=:description, price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date, modified=:modified WHERE id = :id";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
+
                 // posted values
                 $name = htmlspecialchars(strip_tags($_POST['name']));
                 $description = htmlspecialchars(strip_tags($_POST['description']));
@@ -111,51 +121,7 @@
                 $flag = 0;
                 $message = '';
 
-                if (empty($name)) {
 
-                    $flag = 1;
-                    $message = 'Please enter item name.';
-                }
-
-                if (empty($price)) {
-
-                    $flag = 1;
-                    $message = 'Please enter price.';
-                }
-
-                if (empty($promo_price)) {
-
-                    $flag = 1;
-                    $message = 'Please enter promotion price.';
-                }
-                if (empty($manu_date)) {
-
-                    $flag = 1;
-                    $message = 'Please select manufactor date.';
-                }
-
-                if (empty($exp_date)) {
-
-                    $flag = 1;
-                    $message = 'Please select expired date.';
-                }
-                if (!is_numeric($price) || !is_numeric($promo_price)) {
-                    $flag = 1;
-                    $message = "Price must be numerical.";
-                }
-
-                if ($price < 0 || $promo_price < 0) {
-                    $flag = 1;
-                    $message = "Price cannot be negative.";
-                }
-                if ($promo_price > $price) {
-                    $flag = 1;
-                    $message = "Promo Price cannot bigger than Normal Price";
-                }
-                if ($manu_date > $exp_date) {
-                    $flag = 1;
-                    $message = "Expired date must be after Manufacture date";
-                }
 
                 if ($flag == 0) {
 
@@ -181,36 +147,71 @@
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
-                    <td>Name</td>
+                    <td>Customer Name</td>
                     <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Description</td>
-                    <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
+                    <th>Products</th>
+                    <th>Quantity</th>
+
                 </tr>
-                <tr>
-                    <td>Price</td>
-                    <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Promotion Price</td>
-                    <td><input type='text' name='promo_price' value="<?php echo htmlspecialchars($promo_price, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Manufacture Date</td>
-                    <td><input type='date' name='manu_date' value="<?php echo htmlspecialchars($manu_date, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Expired Date</td>
-                    <td><input type='date' name='exp_date' value="<?php echo htmlspecialchars($exp_date, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type='submit' value='Save Changes' class='btn btn-primary' />
-                        <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
-                    </td>
-                </tr>
+
+                <?php
+
+
+                // $product_count = $_POST ? count($_POST['product']) : 1;
+                $arrayP = array('');
+
+                if ($_POST) {
+                    for ($y = 0; $y <= count($_POST['product']); $y++) {
+                        if (empty($_POST['product'][$y])  && empty($_POST['quantity'][$y])) {
+
+                            unset($_POST['product'][$y]);
+                            unset($_POST['quantity'][$y]);
+                        }
+
+                        if (count($_POST['product']) == 0) {
+                            $arrayP = array('');
+                        } else {
+                            $arrayP = $_POST['product'];
+                        }
+                    }
+                }
+                foreach ($arrayP as $pRow => $pID) {
+
+                    echo "<tr class='pRow'>";
+
+                    echo '<td><select class="fs-4 rounded" id="" name="product[]">';
+                    echo  '<option class="bg-white"></option>';
+
+                    $pList = $_POST ? $_POST['product'] : '[]';
+
+                    for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
+
+                        $product_selected = $pArrayID[$pCount] == $pList[$pRow] ? 'selected' : '';
+
+
+
+                        echo "<option value='" . $pArrayID[$pCount] . "' $product_selected>" . $pArrayName[$pCount] . "</option>";
+                    }
+
+                    echo "</select>";
+
+                    echo "<td>";
+                    echo '<select class="w-25 fs-4 rounded" name="quantity[]" >';
+                    echo "<option></option>";
+                    for ($quantity = 1; $quantity <= 5; $quantity++) {
+                        $selected_quantity = $quantity == $selected_quantity ? 'selected' : '';
+                        echo "<option value='$quantity' $selected_quantity>$quantity</option>";
+                    }
+                    echo '</td>';
+                }
+
+
+
+
+
+                ?>
             </table>
         </form>
 
