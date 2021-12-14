@@ -10,18 +10,14 @@
 <body>
     <!-- container -->
     <div class="container">
-    <?php include 'navbar.php';?>
+    <?php 
+    include 'session.php';
+    include 'navbar.php';
+    ?>
       </div>
         <div class="page-header">
             <h1>Contact us</h1>
         </div>
-
-
-        
-
-
-
-
 
     
     <!-- end .container -->

@@ -96,6 +96,7 @@
                 <td></td>
                 <td>
                     <a href='read_customer.php' class='btn btn-danger'>Back to read customers</a>
+                    <?php echo "<a href='update_customer.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
                 </td>
             </tr>
         </table>

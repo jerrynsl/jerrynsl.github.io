@@ -13,6 +13,10 @@
 
     <!-- container -->
     <div class="container">
+    <?php 
+    include 'session.php';
+    include 'navbar.php';
+    ?>
         <div class="page-header">
             <h1>Read Product</h1>
         </div>
@@ -29,7 +33,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price FROM products WHERE id = :id ";
+            $query = "SELECT * FROM products WHERE id = :id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -45,6 +49,8 @@
             $name = $row['name'];
             $description = $row['description'];
             $price = $row['price'];
+            $manu_date = $row['manufacture_date'];
+            $exp_date = $row['expired_date'];
             // shorter way to do that is extract($row)
         }
 
@@ -72,9 +78,18 @@
                 <td><?php echo htmlspecialchars($price, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
+                <td>Manufacture Date</td>
+                <td><?php echo htmlspecialchars($manu_date, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Expired Date</td>
+                <td><?php echo htmlspecialchars($exp_date, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
                 <td></td>
                 <td>
                     <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
+                    <?php echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
                 </td>
             </tr>
         </table>

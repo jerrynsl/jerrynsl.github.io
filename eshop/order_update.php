@@ -31,135 +31,152 @@
 <body>
 
     <div class="container">
-        <div class="page-header">
-            <h1>Update Product</h1>
-        </div>
-        <!-- PHP read record by ID will be here →
         <?php
-        // get passed parameter value, in this case, the record ID
-        // isset() is a PHP function used to verify if a value is there or not
-        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
-
-        //include database connection
-        include 'config/database.php';
-
-        // read current record's data
-        try {
-            // prepare select query
-            $qod = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id = ? LIMIT 0,1";
-            $stmt = $con->prepare($qod);
-
-            // this is the first question mark
-            $stmt->bindParam(1, $id);
-
-            // execute our query
-            $stmt->execute();
-
-            // store retrieved row to a variable
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // values to fill up our form
-            $product_name = $row['name'];
-            $product_id = $row['product_id'];
-            $selected_quantity = $row['quantity'];
-
-            $qp = "SELECT id, name, price FROM products";
-             $stmt2 = $con->prepare($qp);
-            $stmt2->execute();
-
-            $pArrayID = array();
-            $pArrayName = array();
-
-            while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                array_push($pArrayID, $row2['id']);
-                array_push($pArrayName, $row2['name']);
-            }
-        }
-
-        // show error
-        catch (PDOException $exception) {
-            die('ERROR: ' . $exception->getMessage());
-        }
+        include 'session.php';
+        include 'navbar.php';
         ?>
+        <div class="page-header">
+            <h1>Update Order</h1>
+    </div>
 
 
-         HTML form to update record will be here -->
-        <!-- PHP post to update record will be here -->
-        <?php
-        // check if form was submitted
-        if ($_POST) {
+            <?php
+            // get passed parameter value, in this case, the record ID
+            // isset() is a PHP function used to verify if a value is there or not
+            $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+
+            //include database connection
+            include 'config/database.php';
+
+            // read current record's data
             try {
-                // write update query
-                // in this case, it seemed like we have so many fields to pass and
-                // it is better to label them and not use question marks
-                $query = "UPDATE products
-                  SET name=:name, description=:description, price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date, modified=:modified WHERE id = :id";
-                // prepare query for excecution
+
+                $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id = :order_id ";
+
                 $stmt = $con->prepare($query);
+                $stmt->bindParam(":order_id", $id);
+                $stmt->execute();
+                $num = $stmt->rowCount();
 
-                // posted values
-                $name = htmlspecialchars(strip_tags($_POST['name']));
-                $description = htmlspecialchars(strip_tags($_POST['description']));
-                $price = htmlspecialchars(strip_tags($_POST['price']));
-                $promo_price = $_POST['promo_price'];
-                $manu_date = $_POST['manu_date'];
-                $exp_date = $_POST['exp_date'];
+                $qc = "SELECT order_summary.order_id, customers.fname, customers.lname, order_summary.order_create FROM order_summary INNER JOIN customers ON order_summary.username = customers.username WHERE order_id=$id";
 
+                $stmt2 = $con->prepare($qc);
+                $stmt2->execute();
 
-                // bind the parameters
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':description', $description);
-                $stmt->bindParam(':price', $price);
-                $stmt->bindParam(':promotion_price', $promo_price);
-                $stmt->bindParam(':manufacture_date', $manu_date);
-                $stmt->bindParam(':expired_date', $exp_date);
-                $modified = date('Y-m-d H:i:s'); // get the current date and time
-                $stmt->bindParam(':modified', $modified);
-                $stmt->bindParam(':id', $id);
-                // Execute the query
+                // store retrieved row to a variable
+                $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                $fname = $row2['fname'];
+                $lname = $row2['lname'];
 
-                $flag = 0;
-                $message = '';
+                $query3 = "SELECT * FROM products";
+                $stmt3 = $con->prepare($query3);
+                $stmt3->execute();
 
+                $pArrayID = array();
+                $pArrayName = array();
 
-
-                if ($flag == 0) {
-
-                    if ($stmt->execute()) {
-                        echo "<div class='alert alert-success'>Record was saved.</div>";
-                    } else {
-                        $message = 'Unable to save record.';
-                    }
-                } else {
-
-                    echo "<div class='alert alert-danger'>" . $message . "</div>";
+                while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                    array_push($pArrayID, $row3['id']);
+                    array_push($pArrayName, $row3['name']);
                 }
             }
-            // show errors
+            // show error
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
-        } ?>
+            ?>
+
+            <?php
+            // check if form was submitted
+            if ($_POST) {
 
 
 
-        <!--we have our html form here where new record information can be updated-->
+                try {
+
+                    $flag = 0; //0-success
+                    $pflag = 0; //0-fail
+                    $fail_flag = 0;
+                    $message = '';
+
+                    for ($a = 0; $a < count($_POST['product']); $a++) {
+                        if (!empty($_POST['product'][$a]) && !empty($_POST['quantity'][$a])) {
+                            $pflag++; //$pflag=1
+
+                        }
+                        if (empty($_POST['product'][$a]) || empty($_POST['quantity'][$a])) {
+                            $fail_flag++; //$pflag=1
+                        }
+                    }
+
+                    // count(array) !== count(array_unique());
+
+                    if (count($_POST['product']) !== count(array_unique($_POST['product']))) {
+
+                        $flag = 1;
+                        $message .= 'Items are duplicate.';
+                    }
+
+                    if ($pflag == 0 || $fail_flag > 0) {
+                        $flag = 1;
+                        $message.= 'Please select item and quantity.';
+                    }
+
+                    $qdelete = "DELETE FROM order_details WHERE order_id = ?";
+                    $stmt = $con->prepare($qdelete);
+                    $stmt->bindParam(1, $id);
+
+                    if ($flag == 0) {
+                        if ($stmt->execute()) {
+                            for ($c = 0; $c < count($_POST['product']); $c++) {
+                                $qud = 'INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity';
+                                $stmt = $con->prepare($qud);
+                                $stmt->bindParam(':order_id', $id);
+                                $stmt->bindParam(':product_id', $_POST['product'][$c]);
+                                $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
+
+                                if (!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])) {
+                                    $stmt->execute();
+                                }
+                            }
+                            echo "<div class='alert alert-success'>Record was saved.</div>";
+                        }else{
+                            $message.='Unable to save record';
+                        }
+                    }else{
+                        echo "<div class='alert alert-danger'>" . $message . "</div>";
+                    }
+                }
+
+                // show errors
+                catch (PDOException $exception) {
+                    die('ERROR: ' . $exception->getMessage());
+                }
+            }
+
+            ?>
+
+
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
-            <table class='table table-hover table-responsive table-bordered'>
-                <tr>
-                    <td>Customer Name</td>
-                    <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <th>Products</th>
-                    <th>Quantity</th>
 
-                </tr>
+            <?php
+            if ($num > 0) {
 
-                <?php
+                echo "<table class='table table-hover table-responsive table-bordered'>";
+                echo "<tr>";
+                echo "<th>Order ID</th><td>" . $id . "</td>";
+                echo "</tr>";
+                echo "<tr>";
+                echo "<th>Customer Name</th><td>" . $fname . " " . $lname . "</td>";
+                echo "</tr>";
+                echo "<tr>";
+                echo "</table>";
 
+                echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+                echo "<th>Product Name</th>";
+                echo "<th>Quantity</th>";
+                echo "</tr>";
 
-                // $product_count = $_POST ? count($_POST['product']) : 1;
                 $arrayP = array('');
 
                 if ($_POST) {
@@ -169,55 +186,73 @@
                             unset($_POST['product'][$y]);
                             unset($_POST['quantity'][$y]);
                         }
-
-                        if (count($_POST['product']) == 0) {
-                            $arrayP = array('');
-                        } else {
-                            $arrayP = $_POST['product'];
-                        }
+                       
+                    if(count($_POST['product'])==0){
+                        $arrayP = array('');
+                    }else{
+                        $arrayP = $_POST['product']; 
+                    }   
                     }
                 }
-                foreach ($arrayP as $pRow => $pID) {
 
-                    echo "<tr class='pRow'>";
-
-                    echo '<td><select class="fs-4 rounded" id="" name="product[]">';
-                    echo  '<option class="bg-white"></option>';
-
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
                     $pList = $_POST ? $_POST['product'] : '[]';
-
+                    echo "<tr class='pRow'>";
+                    echo "<td><select class='form-control' name='product[]'>";
+                    echo "<option selected></option>";
                     for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
-
-                        $product_selected = $pArrayID[$pCount] == $pList[$pRow] ? 'selected' : '';
-
-
-
-                        echo "<option value='" . $pArrayID[$pCount] . "' $product_selected>" . $pArrayName[$pCount] . "</option>";
+                        $product_selected = $pArrayID[$pCount] == $row['product_id'] || $pArrayID[$pCount] == $pList[$pCount] ? 'selected' : '';
+                        echo "<option value='" . $pArrayID[$pCount] . "'$product_selected>" . $pArrayName[$pCount] . "</option>";
                     }
-
                     echo "</select>";
 
-                    echo "<td>";
-                    echo '<select class="w-25 fs-4 rounded" name="quantity[]" >';
-                    echo "<option></option>";
+                    echo "</td>";
+                    echo "<td><select class='form-select' name='quantity[]'>";
+                    echo  '<option selected></option>';
                     for ($quantity = 1; $quantity <= 5; $quantity++) {
-                        $selected_quantity = $quantity == $selected_quantity ? 'selected' : '';
-                        echo "<option value='$quantity' $selected_quantity>$quantity</option>";
+                        $quantity_selected = $row['quantity'] == $quantity || $quantity == $_POST['quantity'][$quantity]? 'selected' : '';
+                        echo "<option value='$quantity'$quantity_selected>$quantity</option>";
                     }
-                    echo '</td>';
+                    echo "</select></td>";
+                    echo "</tr>";
                 }
+            }
+            ?>
+            <tr>
 
+                <td>
+                    <input type='button' value='Add More' class='add_one btn btn-primary' />
+                    <input type='button' value='Delete' class='delete_one btn btn-danger' />
 
-
-
-
-                ?>
+                </td>
+                <td>
+                    <input type='submit' value='Save Changes' class='btn btn-primary' />
+                    <a href='order_read.php' class='btn btn-danger'>Back to read Order</a>
+                </td>
+            </tr>
             </table>
         </form>
 
-
     </div>
     <!-- end .container -->
+
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('.add_one')) {
+                var element = document.querySelector('.pRow');
+                var clone = element.cloneNode(true);
+                element.after(clone);
+            }
+            if (event.target.matches('.delete_one')) {
+                var total = document.querySelectorAll('.pRow').length;
+                if (total > 1) {
+                    var element = document.querySelector('.pRow');
+                    element.remove(element);
+                }
+            }
+        }, false);
+    </script>
 </body>
 
 </html>

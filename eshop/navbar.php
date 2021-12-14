@@ -24,7 +24,7 @@
                         <a class="nav-link active text-primary" aria-current="page" href="home.php">Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-primary" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle text-primary" href="product_read.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Products
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -32,23 +32,39 @@
                             <li><a class="dropdown-item text-primary" href="product_read.php">Read Product</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-primary" href="read_customer.php">Customer</a>
-
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-primary" href="read_customer.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Customers
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item text-primary" href="create_customer.php">Create Customer</a></li>
+                            <li><a class="dropdown-item text-primary" href="read_customer.php">Read Customer</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-primary" href="order_read.php">Order</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-primary" href="order_read.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Orders
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item text-primary" href="create_new_order.php">Create Order</a></li>
+                            <li><a class="dropdown-item text-primary" href="order_read.php">Read Order</a></li>
+                        </ul>
+                    </li>
 
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link text-primary" href="contact.php">Contact Us</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link text-primary" href="logout.php">Log Out</a>
                     </li>
                 </ul>
 
             </div>
         </div>
     </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
 </body>
 
 </html>

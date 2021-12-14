@@ -10,7 +10,10 @@
 <body>
   <!-- container -->
   <div class="container">
-    <?php include 'navbar.php';?>
+  <?php 
+    include 'session.php';
+    include 'navbar.php';
+    ?>
     <div class="page-header">
       <h1>Create Customer</h1>
     </div>
@@ -18,6 +21,7 @@
 
     <?php
     if ($_POST) {
+
       // include database connection
       include 'config/database.php';
       try {
@@ -152,6 +156,10 @@
     ?>
 
     <!-- html form here where the product information will be entered -->
+    <?php
+    
+      
+    ?>
     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
       <table class='table table-hover table-responsive table-bordered'>
         <tr>
@@ -160,7 +168,7 @@
         </tr>
         <tr>
           <td>Email</td>
-          <td><input type='email' name='email' class='form-control' /></td>
+          <td><input type='email' name='email'  class='form-control' /></td>
         </tr>
         <tr>
           <td>Password</td>
@@ -173,13 +181,13 @@
         </tr>
 
         <tr>
-          <td>First Name</td>
+          <td>First Name</td> 
           <td><input type='text' name='fname' class='form-control' /></td>
         </tr>
         <tr>
         <tr>
           <td>Last Name</td>
-          <td><input type='text' name='lname' class='form-control' /></td>
+          <td><input type='text' name='lname'   class='form-control' /></td>
         </tr>
 
         <tr>
@@ -195,7 +203,7 @@
 
         <tr>
           <td>Date of Birth</td>
-          <td><input type='date' name='dob' class='form-control' /></td>
+          <td><input type='date' name='dob'    class='form-control' /></td>
         </tr>
 
 

@@ -10,7 +10,10 @@
 <body>
     <!-- container -->
     <div class="container">
-    <?php include 'navbar.php';?>
+    <<?php 
+    include 'session.php';
+    include 'navbar.php';
+    ?>
         <div class="page-header">
             <h1>Create Product</h1>
         </div>

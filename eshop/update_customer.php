@@ -31,6 +31,7 @@
 <body>
 
     <div class="container">
+        <?php include 'navbar.php';?>
         <div class="page-header">
             <h1>Update Customer</h1>
         </div>
