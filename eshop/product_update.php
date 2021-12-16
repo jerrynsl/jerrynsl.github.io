@@ -47,7 +47,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT * FROM products WHERE id = ? LIMIT 0,1";
+            $query = "SELECT products.id, products.name, products.description, products.price, products.promotion_price, products.manufacture_date, products.expired_date, categories.category_id FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
@@ -61,11 +61,16 @@
 
             // values to fill up our form
             $name = $row['name'];
+            $product_category_id = $row['category_id'];
             $description = $row['description'];
             $price = $row['price'];
             $promo_price = $row['promotion_price'];
             $manu_date = $row['manufacture_date'];
             $exp_date = $row['expired_date'];
+
+            $catQ = 'SELECT category_id, category_name FROM categories';
+            $stmt2 = $con->prepare($catQ);
+             $stmt2->execute();
         }
 
         // show error
@@ -85,12 +90,13 @@
                 // in this case, it seemed like we have so many fields to pass and
                 // it is better to label them and not use question marks
                 $query = "UPDATE products
-                  SET name=:name, description=:description, price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date, modified=:modified WHERE id = :id";
+                  SET name=:name, description=:description, category_id=:category_id, price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date, modified=:modified WHERE id = :id";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
                 // posted values
                 $name = htmlspecialchars(strip_tags($_POST['name']));
                 $description = htmlspecialchars(strip_tags($_POST['description']));
+                $category = $_POST['category'];
                 $price = htmlspecialchars(strip_tags($_POST['price']));
                 $promo_price = $_POST['promo_price'];
                 $manu_date = $_POST['manu_date'];
@@ -100,6 +106,7 @@
                 // bind the parameters
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':description', $description);
+                $stmt->bindParam(':category_id', $category);
                 $stmt->bindParam(':price', $price);
                 $stmt->bindParam(':promotion_price', $promo_price);
                 $stmt->bindParam(':manufacture_date', $manu_date);
@@ -186,9 +193,37 @@
                     <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
                 </tr>
                 <tr>
+                    <td>Category</td>
+                    <td>
+                        <?php
+
+                        $selected = '';
+                        echo '<select class="fs-4 rounded" id="" name="category">';
+                        echo  '<option selected></option>';
+
+                        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                            
+                            
+                            if ($_POST) {
+                                $selected = $row['category_id'] == $_POST['category'] ? 'selected' : '';
+                            }else{
+
+                                $selected = $row['category_id'] == $product_category_id ? 'selected' : '';
+                            }
+
+                            echo "<option value='" . $row['category_id'] . "' " . $selected . ">" . $row['category_name'] . "</option>";
+                        }
+
+                        echo "</select>";
+
+                        ?>
+                    </td>
+                </tr>
+                <tr>
                     <td>Description</td>
                     <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
                 </tr>
+
                 <tr>
                     <td>Price</td>
                     <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES);  ?>" class='form-control' /></td>

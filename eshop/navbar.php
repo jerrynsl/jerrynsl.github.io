@@ -51,7 +51,15 @@
                             <li><a class="dropdown-item text-primary" href="order_read.php">Read Order</a></li>
                         </ul>
                     </li>
-
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-primary" href="category_read.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item text-primary" href="category_create.php">Create Categories</a></li>
+                            <li><a class="dropdown-item text-primary" href="category_read.php">Read Categories</a></li>
+                        </ul>
+                    </li>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link text-primary" href="contact.php">Contact Us</a>

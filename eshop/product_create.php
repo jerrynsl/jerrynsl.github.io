@@ -10,32 +10,42 @@
 <body>
     <!-- container -->
     <div class="container">
-    <<?php 
-    include 'session.php';
-    include 'navbar.php';
-    ?>
+        <?php
+        include 'session.php';
+        include 'navbar.php';
+
+        ?>
         <div class="page-header">
             <h1>Create Product</h1>
         </div>
 
 
         <?php
+        include 'config/database.php';
+
+        $catQ = 'SELECT category_id, category_name FROM categories';
+        $stmt2 = $con->prepare($catQ);
+        $stmt2->execute();
+
+
         if ($_POST) {
             // include database connection
-            include 'config/database.php';
+
             try {
                 // insert query
-                $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
+                $query = "INSERT INTO products SET name=:name, category_id=:category_id, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 $name = $_POST['name'];
+                $category = $_POST['category'];
                 $description = $_POST['description'];
                 $price = $_POST['price'];
-                $promo_price=$_POST['promo_price'];
-                $manu_date=$_POST['manu_date'];
-                $exp_date=$_POST['exp_date'];
+                $promo_price = $_POST['promo_price'];
+                $manu_date = $_POST['manu_date'];
+                $exp_date = $_POST['exp_date'];
                 // bind the parameters
                 $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':category_id', $category);
                 $stmt->bindParam(':description', $description);
                 $stmt->bindParam(':price', $price);
                 $created = date('Y-m-d H:i:s'); // get the current date and time
@@ -45,73 +55,66 @@
                 $stmt->bindParam(':expired_date', $exp_date);
                 // Execute the query
 
-                $flag=0;
-                $message='';
+                $flag = 0;
+                $message = '';
 
-                if(empty($name)){
+                if (empty($name)) {
 
-                    $flag=1;
-                    $message='Please enter item name.';
-
+                    $flag = 1;
+                    $message = 'Please enter item name.';
                 }
 
-                if(empty($price)){
+                if (empty($price)) {
 
-                    $flag=1;
-                    $message='Please enter price.';
-
+                    $flag = 1;
+                    $message = 'Please enter price.';
                 }
 
-                if(empty($promo_price)){
+                if (empty($promo_price)) {
 
-                    $flag=1;
-                    $message='Please enter promotion price.';
-
+                    $flag = 1;
+                    $message = 'Please enter promotion price.';
                 }
-                if(empty($manu_date)){
+                if (empty($manu_date)) {
 
-                    $flag=1;
-                    $message='Please select manufactor date.';
-
+                    $flag = 1;
+                    $message = 'Please select manufactor date.';
                 }
 
-                if(empty($exp_date)){
+                if (empty($exp_date)) {
 
-                    $flag=1;
-                    $message='Please select expired date.';
-
+                    $flag = 1;
+                    $message = 'Please select expired date.';
                 }
                 if (!is_numeric($price) || !is_numeric($promo_price)) {
                     $flag = 1;
                     $message = "Price must be numerical.";
-                } 
-                
+                }
+
                 if ($price < 0 || $promo_price < 0) {
                     $flag = 1;
                     $message = "Price cannot be negative.";
-                } 
+                }
                 if ($promo_price > $price) {
                     $flag = 1;
                     $message = "Promo Price cannot bigger than Normal Price";
-                } 
+                }
                 if ($manu_date > $exp_date) {
                     $flag = 1;
                     $message = "Expired date must be after Manufacture date";
                 }
 
-                if ($flag==0){
+                if ($flag == 0) {
 
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was saved.</div>";
+                    if ($stmt->execute()) {
+                        echo "<div class='alert alert-success'>Record was saved.</div>";
+                    } else {
+                        $message = 'Unable to save record.';
+                    }
                 } else {
-                    $message= 'Unable to save record.';
-                }
-            
-            }else{
 
-                echo "<div class='alert alert-danger'>".$message."</div>";
-            
-            }
+                    echo "<div class='alert alert-danger'>" . $message . "</div>";
+                }
             }
             // show error
             catch (PDOException $exception) {
@@ -120,7 +123,7 @@
         }
 
         ?>
-        
+
         <!-- html form here where the product information will be entered -->
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
             <table class='table table-hover table-responsive table-bordered'>
@@ -129,8 +132,31 @@
                     <td><input type='text' name='name' class='form-control' /></td>
                 </tr>
                 <tr>
+                    <td>Category</td>
+                    <td>
+                        <?php
+
+                        $selected = '';
+                        echo '<select class="fs-4 rounded" id="" name="category">';
+                        echo  '<option selected></option>';
+
+                        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+
+                            if ($_POST) {
+                                $selected = $row['category_id'] == $_POST['category'] ? 'selected' : '';
+                            }
+
+                            echo "<option value='" . $row['category_id'] . "' " . $selected . ">" . $row['category_name'] . "</option>";
+                        }
+
+                        echo "</select>";
+
+                        ?>
+                    </td>
+                </tr>
+                <tr>
                     <td>Description</td>
-                    <td><textarea type='text' name='description' class='form-control' ></textarea></td>
+                    <td><textarea type='text' name='description' class='form-control'></textarea></td>
                 </tr>
                 <tr>
                     <td>Price</td>

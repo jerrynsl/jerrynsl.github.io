@@ -18,7 +18,7 @@
     include 'navbar.php';
     ?>
         <div class="page-header">
-            <h1>Read Product</h1>
+            <h1>Read Category</h1>
         </div>
 
         <!-- PHP read one record will be here -->
@@ -33,11 +33,11 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT products.id, products.name, products.description, products.price, products.promotion_price, products.manufacture_date, products.expired_date, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE id = :id ";
+            $query = "SELECT * FROM categories WHERE category_id = :category_id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
-            $stmt->bindParam(":id", $id);
+            $stmt->bindParam(":category_id", $id);
 
             // execute our query
             $stmt->execute();
@@ -46,13 +46,8 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // values to fill up our form
-            $name = $row['name'];
-            $description = $row['description'];
-            $price = $row['price'];
-            $promo_price = $row['promotion_price'];
-            $manu_date = $row['manufacture_date'];
-            $exp_date = $row['expired_date'];
-            $product_category = $row['category_name'];
+            $cname = $row['category_name'];
+            $cdescription = $row['category_description'];
             // shorter way to do that is extract($row)
         }
 
@@ -68,38 +63,18 @@
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
-                <td>Name</td>
-                <td><?php echo htmlspecialchars($name, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Category</td>
-                <td><?php echo htmlspecialchars($product_category, ENT_QUOTES);  ?></td>
+                <td>Category Name</td>
+                <td><?php echo htmlspecialchars($cname, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td>Description</td>
-                <td><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Price</td>
-                <td><?php echo htmlspecialchars($price, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Promotion Price</td>
-                <td><?php echo htmlspecialchars($promo_price, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Manufacture Date</td>
-                <td><?php echo htmlspecialchars($manu_date, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Expired Date</td>
-                <td><?php echo htmlspecialchars($exp_date, ENT_QUOTES);  ?></td>
+                <td><?php echo htmlspecialchars($cdescription, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
-                    <?php echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
+                    <a href='category_read.php' class='btn btn-danger'>Back to read products</a>
+                    <?php echo "<a href='category_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
                 </td>
             </tr>
         </table>
