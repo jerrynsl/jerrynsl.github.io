@@ -20,35 +20,43 @@
         <?php
         // include database connection
         include 'config/database.php';
-
+        $flag=0;
         // delete message prompt will be here
-
-        // select all data
-        if ($_POST) {
-            $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE category_id =" . $_POST['category'] . " ORDER BY id DESC";
-        } else {
-            $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id ORDER BY id DESC";
-        }
+        $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id ORDER BY id DESC";
         $stmt = $con->prepare($query);
+
+        // select all data  
+        if (isset($_POST['filter'])) {
+            if ($_POST['category'] != 'all') {
+                $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE categories.category_id=:category_id ORDER BY id DESC";
+                $stmt = $con->prepare($query);
+                $stmt->bindParam(":category_id", $_POST['category']);
+            }
+        } else if (isset($_POST['search'])) {
+            if(empty($_POST['pname'])){
+                $flag=1;
+                echo "<div class='alert alert-danger'>Please insert value</div>";
+
+            }
+            $pname = "%".$_POST['pname']."%";
+            $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE products.name LIKE :name ORDER BY id DESC";
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(":name", $pname);
+        }
         $stmt->execute();
-
-        // this is how to get number of rows returned
         $num = $stmt->rowCount();
-
 
         $catQ = 'SELECT category_id, category_name FROM categories';
         $stmt2 = $con->prepare($catQ);
         $stmt2->execute();
 
-        // link to create record form
-        echo "<a href='product_create.php' class='btn btn-primary m-b-1em'>Create New Product</a>";
-
-
-        echo '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
-
+        echo "<table>";
+        echo "<tr>";
+        echo "<td><a href='product_create.php' class='btn btn-primary m-b-1em'>Create New Product</a></td>";
+        echo '<td><form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
         $selected = '';
         echo '<select class="fs-4 rounded" id="" name="category">';
-        echo  '<option selected></option>';
+        echo  '<option value="all" >All</option>';
 
         while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 
@@ -58,12 +66,14 @@
 
             echo "<option value='" . $row['category_id'] . "' " . $selected . ">" . $row['category_name'] . "</option>";
         }
-
         echo "</select>";
 
-        echo " <input type='submit' value='Save' class='btn btn-primary' />";
-
-        echo '</form>';
+        $pname= isset($_POST['search']) ? $_POST['pname'] : '';
+        echo " <input type='submit' name='filter' value='Filter' class='btn btn-primary' />";
+        echo '</td></form>';
+        echo '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
+        echo "<td><input type='text' name='pname' value='$pname' /> <input type='submit' name='search' value='Search' class='btn btn-danger' /></td>";
+        echo "</tr></form></table>";
 
         //check if more than 0 record found
         if ($num > 0) {
@@ -74,7 +84,7 @@
             echo "<tr>";
             echo "<th>ID</th>";
             echo "<th>Name</th>";
-            echo "<th>Categorys</th>";
+            echo isset($_POST['filter']) && $_POST['category'] !== 'all' ? '' : "<th>Category</th>";
             echo "<th>Description</th>";
             echo "<th>Price</th>";
             echo "<th>Action</th>";
@@ -82,14 +92,11 @@
 
             // retrieve our table contents
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // extract row
-                // this will make $row['firstname'] to just $firstname only
                 extract($row);
-                // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$id}</td>";
                 echo "<td>{$name}</td>";
-                echo "<td>{$category_name}</td>";
+                echo isset($_POST['filter']) && $_POST['category'] !== 'all' ? '' : "<td>{$category_name}</td>";
                 echo "<td>{$description}</td>";
                 echo "<td>{$price}</td>";
                 echo "<td>";
@@ -104,17 +111,11 @@
                 echo "</td>";
                 echo "</tr>";
             }
-
-
-
-            // end table
             echo "</table>";
         } else {
             echo "<div class='alert alert-danger'>No records found.</div>";
         }
         ?>
-
-
     </div> <!-- end .container -->
 
     <!-- confirm delete record will be here -->

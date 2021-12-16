@@ -13,10 +13,10 @@
 
     <!-- container -->
     <div class="container">
-    <?php 
-    include 'session.php';
-    include 'navbar.php';
-    ?>
+        <?php
+        include 'session.php';
+        include 'navbar.php';
+        ?>
         <div class="page-header">
             <h1>Read Order</h1>
         </div>
@@ -33,7 +33,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id=:order_id";
+            $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name, products.price FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id=:order_id";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -48,7 +48,7 @@
 
             $stmt2 = $con->prepare($qc);
             $stmt2->execute();
-            
+
             // store retrieved row to a variable
             $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
             $fname = $row2['fname'];
@@ -57,41 +57,46 @@
             // values to fill up our form
             if ($num > 0) {
 
-                echo "<table class='table table-hover table-responsive table-bordered'>"; 
+                echo "<table class='table table-hover table-responsive table-bordered'>";
                 echo "<tr>";
                 echo "<th>Order ID</th><td>" . $id . "</td>";
                 echo "</tr>";
                 echo "<tr>";
-                echo "<th>Customer Name</th><td>".$fname." ".$lname."</td>";
+                echo "<th>Customer Name</th><td>" . $fname . " " . $lname . "</td>";
                 echo "</tr>";
                 echo "<tr>";
                 echo "</table>";
-                
+
                 echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
                 echo "<th>Product Name</th>";
+                echo "<th>Price Per Item</th>";
                 echo "<th>Quantity</th>";
+                echo "<th>Total Price</th>";
                 echo "</tr>";
-
+                $grand_total=0;
                 // retrieve our table contents
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-
-                    // extract row
-                    // this will make $row['firstname'] to just $firstname only
                     extract($row);
+                    $items_total=$row['quantity']*$row['price'];
 
-
-                    // creating new table row per record
                     echo "<tr>";
                     echo "<td>" . $row['name'] . "</td>";
+                    echo "<td>" . $row['price'] . "</td>";
                     echo "<td>" . $row['quantity'] . "</td>";
-
+                    echo "<td>$items_total</td>";
                     echo "</tr>";
+                    
+                    $grand_total=$grand_total+$items_total;
                 }
-                echo "<tr>";
 
+                echo "<tr>";
+                echo "<th colspan='3'>Grand Total:</th>";
+                echo "<td class='col'>$grand_total</td>";
+                echo "</tr>";
+
+                echo "<tr>";
                 echo "<td colspan='4'><a href='order_read.php' class='btn btn-danger'>Back to read order</a>";
-                echo "<a href='order_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; 
+                echo "<a href='order_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
                 echo "</td>";
                 echo "</tr>";
                 echo "</table>";
