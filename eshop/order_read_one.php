@@ -90,7 +90,7 @@
                 }
 
                 echo "<tr>";
-                echo "<th colspan='3'>Grand Total:</th>";
+                echo "<th colspan='3' class='text-end'>Grand Total:</th>";
                 echo "<td class='col'>$grand_total</td>";
                 echo "</tr>";
 

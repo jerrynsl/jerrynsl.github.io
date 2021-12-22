@@ -1,35 +1,27 @@
 <!DOCTYPE HTML>
 <html>
-
 <head>
     <title>PDO - Read Records - PHP CRUD Tutorial</title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <style>
         .m-r-1em {
             margin-right: 1em;
         }
-
         .m-b-1em {
             margin-bottom: 1em;
         }
-
         .m-l-1em {
             margin-left: 1em;
         }
-
         .mt0 {
             margin-top: 0;
         }
     </style>
 </head>
-
 <body>
-
     <div class="container">
         <?php
         include 'session.php';
@@ -38,26 +30,19 @@
         <div class="page-header">
             <h1>Update Order</h1>
         </div>
-
-
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
         $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
-
         //include database connection
         include 'config/database.php';
-
         // read current record's data
         try {
-
             $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id = :order_id ";
-
             $stmt = $con->prepare($query);
             $stmt->bindParam(":order_id", $id);
             $stmt->execute();
             $num = $stmt->rowCount();
-
             $qc = "SELECT order_summary.order_id, customers.fname, customers.lname, order_summary.order_create FROM order_summary INNER JOIN customers ON order_summary.username = customers.username WHERE order_id=$id";
 
             $stmt2 = $con->prepare($qc);
@@ -89,11 +74,7 @@
         <?php
         // check if form was submitted
         if ($_POST) {
-
-
-
             try {
-
                 $flag = 0; //0-success
                 $pflag = 0; //0-fail
                 $fail_flag = 0;
@@ -116,12 +97,10 @@
                     $flag = 1;
                     $message .= 'Items are duplicate.';
                 }
-
                 if ($pflag == 0 || $fail_flag > 0) {
                     $flag = 1;
                     $message .= 'Please select item and quantity.';
                 }
-
                 $qdelete = "DELETE FROM order_details WHERE order_id = ?";
                 $stmt = $con->prepare($qdelete);
                 $stmt->bindParam(1, $id);
@@ -134,12 +113,12 @@
                             $stmt->bindParam(':order_id', $id);
                             $stmt->bindParam(':product_id', $_POST['product'][$c]);
                             $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
-
                             if (!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])) {
                                 $stmt->execute();
+                                echo "<script>location.replace('order_read_one.php?id=".$id."')</script>";
                             }
                         }
-                        echo "<div class='alert alert-success'>Record was saved.</div>";
+                        
                     } else {
                         $message .= 'Unable to save record';
                     }
@@ -155,10 +134,7 @@
         }
 
         ?>
-
-
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
-
             <?php
             if ($num > 0) {
 
@@ -171,7 +147,6 @@
                 echo "</tr>";
                 echo "<tr>";
                 echo "</table>";
-
                 echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
                 echo "<th>Product Name</th>";
                 echo "<th>Quantity</th>";
@@ -211,7 +186,6 @@
                             echo "<option value='" . $pArrayID[$pCount] . "'$product_selected>" . $pArrayName[$pCount] . "</option>";
                         }
                         echo "</select>";
-
                         echo "</td>";
                         echo "<td><select class='form-select' name='quantity[]'>";
                         echo  '<option selected></option>';
@@ -230,11 +204,9 @@
             }
             ?>
             <tr>
-
                 <td>
                     <input type='button' value='Add More' class='add_one btn btn-primary' />
                     <input type='button' value='Delete' class='delete_one btn btn-danger' />
-
                 </td>
                 <td>
                     <input type='submit' value='Save Changes' class='btn btn-primary' />
@@ -243,10 +215,8 @@
             </tr>
             </table>
         </form>
-
     </div>
     <!-- end .container -->
-
     <script>
         document.addEventListener('click', function(event) {
             if (event.target.matches('.add_one')) {
