@@ -33,7 +33,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT products.id, products.name, products.description, products.price, products.promotion_price, products.manufacture_date, products.expired_date, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE id = :id ";
+            $query = "SELECT products.id, products.name, products.description, products.product_img, products.price, products.promotion_price, products.manufacture_date, products.expired_date, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE id = :id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -48,12 +48,15 @@
             // values to fill up our form
             $name = $row['name'];
             $description = $row['description'];
+            $product_img = $row['product_img'];
             $price = $row['price'];
             $promo_price = $row['promotion_price'];
             $manu_date = $row['manufacture_date'];
             $exp_date = $row['expired_date'];
             $product_category = $row['category_name'];
             // shorter way to do that is extract($row)
+
+            
         }
 
         // show error
@@ -67,6 +70,18 @@
         <!-- HTML read one record table will be here -->
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
+            <tr>
+                <td>Image</td>
+                
+                <?php
+                    if($product_img==''){
+                        echo '<td>No image</td>';
+                    }else{
+                        echo '<td><img src="imagesP/'.$product_img.'"width="200px"></td>';
+                    }
+                
+                ?>
+            </tr>
             <tr>
                 <td>Name</td>
                 <td><?php echo htmlspecialchars($name, ENT_QUOTES);  ?></td>

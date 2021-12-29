@@ -10,7 +10,7 @@
 <body>
   <!-- container -->
   <div class="container">
-  <?php 
+    <?php
     include 'session.php';
     include 'navbar.php';
     ?>
@@ -26,7 +26,7 @@
       include 'config/database.php';
       try {
         // insert query
-        $query = "INSERT INTO customers SET username=:username, email=:email, password=:password, fname=:fname, lname=:lname, gender=:gender, dob=:dob";
+        $query = "INSERT INTO customers SET username=:username, email=:email, password=:password, fname=:fname, lname=:lname, gender=:gender, dob=:dob, customer_img=:customer_img";
         // prepare query for execution
         $stmt = $con->prepare($query);
         $username = $_POST['username'];
@@ -37,82 +37,111 @@
         $lname = $_POST['lname'];
         $gender = $_POST['gender'];
         $dob = $_POST['dob'];
+        $customer_img =  basename($_FILES["cimg"]["name"]);
 
         $flag = 0;
         $message = "";
+
+        if(!empty($_FILES['cimg']['name'])){
+        $target_dir = "imagesC/";
+        $target_file = $target_dir . basename($_FILES["cimg"]["name"]);
+        $isUploadOK = TRUE;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $check = getimagesize($_FILES["cimg"]["tmp_name"]);
+        if ($check !== false) {
+          echo "File is an image - " . $check["mime"] . ".";
+          $isUploadOK = TRUE;
+        } else {
+          $flag = 1;
+          $message .= "File is not an image.<br>";
+          $isUploadOK = FALSE;
+        }
+
+
+        if ($_FILES["cimg"]["size"] > 5000000) {
+          $flag = 1;
+          $message .= "Sorry, your file is too large.<br>";
+          $isUploadOK = FALSE;
+        }
+        // Allow certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+          $flag = 1;
+          $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+          $isUploadOK = FALSE;
+        }
+        // Check if $uploadOk is set to 0 by an error
+        if ($isUploadOK == FALSE) {
+          $flag = 1;
+          $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
+        } else {
+          if (move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file)) {
+            echo "The file " . basename($_FILES["cimg"]["name"]) . " has been uploaded.";
+          } else {
+            $flag = 1;
+            $message .= "Sorry, there was an error uploading your file.<br>";
+          }
+        }
+      }else{
+
+        $customer_img='';
+      }
 
 
         if (!preg_match("/[a-zA-Z]/", $password) || !preg_match("/[0-9]/", $password)) {
           $flag = 1;
           $message = "Your password must contain alphabets and number.";
         }
-        
-        // else if (!preg_match("/[a-zA-Z0-9]{6,}/",$password)){
 
-        //   $flag=1;
-        //   $message = "Your password must contain alphabets and number.";
-
-        // }
-        // $checkAl = preg_match("/[a-zA-Z]/",$password);
-        // echo $checkAl;
-        // if(!preg_match("[a-zA-Z]",$password) ){
-        //   echo "<div class='alert alert-danger'>Your password must contain alphabets.</div>";
-
-        // }
 
         if (empty($_POST['username'])) {
 
           $flag = 1;
-          
-          $message = "Please insert your username.";
+
+          $message .= "Please insert your username.<br>";
         }
 
         if (empty($email)) {
-          
+
           $flag = 1;
-          
-          $message = "Please insert your email.";
+
+          $message .= "Please insert your email.<br>";
         }
 
         if (empty($fname)) {
-          
+
           $flag = 1;
-          
-          $message = "Please insert your first name.";
+
+          $message .= "Please insert your first name.<br>";
         }
 
         if (empty($lname)) {
-          
+
           $flag = 1;
-          
-          $message = "Please insert your last name.";
+
+          $message .= "Please insert your last name.<br>";
         }
 
 
-        if(empty($gender)){
+        if (empty($gender)) {
 
           $flag = 1;
 
-          $message = "Please select gender.";
-
+          $message .= "Please select gender.<br>";
         }
 
-        if(empty($dob)){
+        if (empty($dob)) {
 
           $flag = 1;
 
-          $message = "Please select your date of birth.";
-
+          $message .= "Please select your date of birth.<br>";
         }
 
         if ($password == $confirmpassword) {
 
           $password = md5($password);
-
-         
         } else {
           $flag = 1;
-          $message = "Password is not same as Confirm Password.";
+          $message .= "Password is not same as Confirm Password.<br>";
         }
 
 
@@ -124,25 +153,22 @@
         $stmt->bindParam(':lname', $lname);
         $stmt->bindParam(':gender', $gender);
         $stmt->bindParam(':dob', $dob);
-    
+        $stmt->bindParam(':customer_img', $customer_img);
 
-      
 
-        if($flag == 0) {
+
+        if ($flag == 0) {
 
           if ($stmt->execute()) {
 
             echo "<div class='alert alert-success'>Record was saved.</div>";
-
           } else {
             $flag = 1;
             $message = "Unable to save record.";
           }
-         
-        }else {
+        } else {
 
           echo "<div class='alert alert-danger'>" . $message . "</div>";
-
         }
         // Execute the query
 
@@ -157,10 +183,10 @@
 
     <!-- html form here where the product information will be entered -->
     <?php
-    
-      
+
+
     ?>
-    <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+    <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST" enctype="multipart/form-data">
       <table class='table table-hover table-responsive table-bordered'>
         <tr>
           <td>Username</td>
@@ -168,7 +194,7 @@
         </tr>
         <tr>
           <td>Email</td>
-          <td><input type='email' name='email'  class='form-control' /></td>
+          <td><input type='email' name='email' class='form-control' /></td>
         </tr>
         <tr>
           <td>Password</td>
@@ -181,13 +207,13 @@
         </tr>
 
         <tr>
-          <td>First Name</td> 
+          <td>First Name</td>
           <td><input type='text' name='fname' class='form-control' /></td>
         </tr>
         <tr>
         <tr>
           <td>Last Name</td>
-          <td><input type='text' name='lname'   class='form-control' /></td>
+          <td><input type='text' name='lname' class='form-control' /></td>
         </tr>
 
         <tr>
@@ -203,10 +229,14 @@
 
         <tr>
           <td>Date of Birth</td>
-          <td><input type='date' name='dob'    class='form-control' /></td>
+          <td><input type='date' name='dob' class='form-control' /></td>
         </tr>
 
-
+        <tr>
+          <td>Select image (optional):</td>
+          <td> <input type="file" name="cimg" id="fileToUpload">
+          </td>
+        </tr>
 
         <tr>
           <td></td>

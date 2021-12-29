@@ -33,12 +33,13 @@
 
             try {
                 // insert query
-                $query = "INSERT INTO products SET name=:name, category_id=:category_id, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
+                $query = "INSERT INTO products SET name=:name, category_id=:category_id, description=:description, product_img=:product_img, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 $name = $_POST['name'];
                 $category = $_POST['category'];
                 $description = $_POST['description'];
+                $product_img = basename($_FILES["product_img"]["name"]);
                 $price = $_POST['price'];
                 $promo_price = $_POST['promo_price'];
                 $manu_date = $_POST['manu_date'];
@@ -47,6 +48,7 @@
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':category_id', $category);
                 $stmt->bindParam(':description', $description);
+                $stmt->bindParam(':product_img',$product_img);
                 $stmt->bindParam(':price', $price);
                 $created = date('Y-m-d H:i:s'); // get the current date and time
                 $stmt->bindParam(':created', $created);
@@ -57,6 +59,52 @@
 
                 $flag = 0;
                 $message = '';
+
+                if(!empty($_FILES['product_img']['name'])){
+                $target_dir = "imagesP/";
+                $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
+                $isUploadOK = TRUE;
+                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                $check = getimagesize($_FILES["product_img"]["tmp_name"]);
+                    if ($check !== false) {
+                        echo "File is an image - " . $check["mime"] . ".";
+                        $isUploadOK = TRUE;
+                    } else {
+                        $flag=1;
+                        $message .= "File is not an image.<br>";
+                        $isUploadOK = FALSE;
+                       
+                    }
+            
+
+                if ($_FILES["product_img"]["size"] > 5000000) {
+                    $flag=1;
+                    $message .= "Sorry, your file is too large.<br>";
+                    $isUploadOK = FALSE;
+                }
+                // Allow certain file formats
+                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
+                    $flag=1;
+                    $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+                    $isUploadOK = FALSE;
+                }
+                // Check if $uploadOk is set to 0 by an error
+                if ($isUploadOK == FALSE) {
+                    $flag=1;
+                    $message .= "Sorry, your file was not uploaded.";// if everything is ok, try to upload file
+                } else {
+                    if (move_uploaded_file($_FILES["product_img"]["tmp_name"], $target_file)) {
+                        echo "The file ". basename( $_FILES["product_img"]["name"]). " has been uploaded.";
+                    } else {
+                        $flag=1;
+                        $message .= "Sorry, there was an error uploading your file.<br>";
+                    }
+                }
+            }
+            else{
+
+                $product_img='';
+            }
 
                 if (empty($name)) {
 
@@ -125,7 +173,7 @@
         ?>
 
         <!-- html form here where the product information will be entered -->
-        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST" enctype="multipart/form-data">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Name</td>
@@ -152,6 +200,11 @@
                         echo "</select>";
 
                         ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Select image to upload:</td>
+                    <td> <input type="file" name="product_img" id="fileToUpload"/>
                     </td>
                 </tr>
                 <tr>

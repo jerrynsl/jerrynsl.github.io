@@ -29,7 +29,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT username, fname, lname, gender, dob, regdatetime, accountstatus FROM customers WHERE username = :username ";
+            $query = "SELECT username, fname, lname, gender, dob, customer_img, regdatetime, accountstatus FROM customers WHERE username = :username ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -47,6 +47,7 @@
             $lname = $row['lname'];
             $gender = $row['gender'];
             $dob = $row['dob'];
+            $customer_img = $row['customer_img'];
             $regdatetime = $row['regdatetime'];
             $accountstatus = $row['accountstatus'];
 
@@ -65,6 +66,18 @@
         <!-- HTML read one record table will be here -->
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
+        <tr>
+                <td>Customer Image</td>
+                
+                <?php
+                    if($customer_img==''){
+                        echo '<td>No image</td>';
+                    }else{
+                        echo '<td><img src="imagesC/'.$customer_img.'"width="200px"></td>';
+                    }
+                
+                ?>
+            </tr>
             <tr>
                 <td>Userame</td>
                 <td><?php echo htmlspecialchars($username, ENT_QUOTES);  ?></td>

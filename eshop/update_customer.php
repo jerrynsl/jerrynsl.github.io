@@ -68,6 +68,7 @@
             $gender = $row['gender'];
             $accountstatus = $row['accountstatus'];
             $dob = $row['dob'];
+            $customer_img = $row['customer_img'];
         }
 
         // show error
@@ -86,7 +87,7 @@
                 // write update query
                 // in this case, it seemed like we have so many fields to pass and
                 // it is better to label them and not use question marks
-                $query = "UPDATE customers SET email=:email, password=:password,  fname=:fname, lname=:lname, gender=:gender, dob=:dob, accountstatus=:accountstatus WHERE username=:username";
+                $query = "UPDATE customers SET email=:email, password=:password,  fname=:fname, lname=:lname, gender=:gender, dob=:dob, customer_img=:customer_img, accountstatus=:accountstatus WHERE username=:username";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
                 // posted values
@@ -96,11 +97,56 @@
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
                 $accountstatus = htmlspecialchars(strip_tags($_POST['accountstatus']));
                 $dob = htmlspecialchars(strip_tags($_POST['dob']));
+                $customer_img = basename($_FILES["cimg"]["name"]);
                 $old_pass = $_POST['old_pass'];
                 $new_pass = $_POST['new_pass'];
                 $confirm_new_pass = $_POST['confirm_new_pass'];
                 $flag = 0;
                 $message = '';
+                if(!empty($_FILES['cimg']['name'])){
+                    $target_dir = "imagesC/";
+                    unlink($target_dir.$row['cimg']);
+                    $target_file = $target_dir . basename($_FILES["cimg"]["name"]);
+                    $isUploadOK = TRUE;
+                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                    $check = getimagesize($_FILES["cimg"]["tmp_name"]);
+                    if ($check !== false) {
+                      echo "File is an image - " . $check["mime"] . ".";
+                      $isUploadOK = TRUE;
+                    } else {
+                      $flag = 1;
+                      $message .= "File is not an image.<br>";
+                      $isUploadOK = FALSE;
+                    }
+            
+            
+                    if ($_FILES["cimg"]["size"] > 5000000) {
+                      $flag = 1;
+                      $message .= "Sorry, your file is too large.<br>";
+                      $isUploadOK = FALSE;
+                    }
+                    // Allow certain file formats
+                    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+                      $flag = 1;
+                      $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+                      $isUploadOK = FALSE;
+                    }
+                    // Check if $uploadOk is set to 0 by an error
+                    if ($isUploadOK == FALSE) {
+                      $flag = 1;
+                      $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
+                    } else {
+                      if (move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file)) {
+                        echo "The file " . basename($_FILES["cimg"]["name"]) . " has been uploaded.";
+                      } else {
+                        $flag = 1;
+                        $message .= "Sorry, there was an error uploading your file.<br>";
+                      }
+                    }
+                  }else{
+            
+                    $customer_img=$row['customer_img'];
+                  }
 
                 if (empty($old_pass) && empty($new_pass) && empty($confirm_new_pass)) {
                     $flag = 0;
@@ -142,6 +188,7 @@
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':accountstatus', $accountstatus);
                 $stmt->bindParam(':dob', $dob);
+                $stmt->bindParam(':customer_img', $customer_img);
                 $stmt->bindParam(':username', $id);
                 // Execute the query
 
@@ -166,8 +213,21 @@
 
 
         <!--we have our html form here where new record information can be updated-->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
             <table class='table table-hover table-responsive table-bordered'>
+            <tr>
+                    <td>Image</td>
+
+                    <?php
+                    if ($customer_img == '') {
+                        echo '<td>No image<br>';
+                    } else {
+                        echo '<td><img src="imagesC/' . $customer_img . '" width="200px"><br>';
+                    }
+                    echo ' <input type="file" name="cimg" id="fileToUpload" /></td>';
+                    ?>
+                   
+                </tr>
                 <tr>
                     <td>Username</td>
                     <td><input type='text' name='username' value="<?php echo htmlspecialchars($username, ENT_QUOTES);  ?>" class='form-control' disabled /></td>
