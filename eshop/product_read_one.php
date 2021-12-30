@@ -13,10 +13,10 @@
 
     <!-- container -->
     <div class="container">
-    <?php 
-    include 'session.php';
-    include 'navbar.php';
-    ?>
+        <?php
+        include 'session.php';
+        include 'navbar.php';
+        ?>
         <div class="page-header">
             <h1>Read Product</h1>
         </div>
@@ -56,7 +56,7 @@
             $product_category = $row['category_name'];
             // shorter way to do that is extract($row)
 
-            
+
         }
 
         // show error
@@ -72,15 +72,7 @@
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
                 <td>Image</td>
-                
-                <?php
-                    if($product_img==''){
-                        echo '<td>No image</td>';
-                    }else{
-                        echo '<td><img src="imagesP/'.$product_img.'"width="200px"></td>';
-                    }
-                
-                ?>
+                <td><img src="imagesP/<?php echo $product_img;?>" width="200px"></td>
             </tr>
             <tr>
                 <td>Name</td>

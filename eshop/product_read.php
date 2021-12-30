@@ -20,8 +20,17 @@
         <?php
         // include database connection
         include 'config/database.php';
-        $flag=0;
+        $flag = 0;
         // delete message prompt will be here
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+
+        // if it was redirected from delete.php
+        if ($action == 'deleted') {
+            echo "<div class='alert alert-success'>Record was deleted.</div>";
+        }
+
+
+
         $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id ORDER BY id DESC";
         $stmt = $con->prepare($query);
 
@@ -33,12 +42,11 @@
                 $stmt->bindParam(":category_id", $_POST['category']);
             }
         } else if (isset($_POST['search'])) {
-            if(empty($_POST['pname'])){
-                $flag=1;
+            if (empty($_POST['pname'])) {
+                $flag = 1;
                 echo "<div class='alert alert-danger'>Please insert value</div>";
-
             }
-            $pname = "%".$_POST['pname']."%";
+            $pname = "%" . $_POST['pname'] . "%";
             $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE products.name LIKE :name ORDER BY id DESC";
             $stmt = $con->prepare($query);
             $stmt->bindParam(":name", $pname);
@@ -68,7 +76,7 @@
         }
         echo "</select>";
 
-        $pname= isset($_POST['search']) ? $_POST['pname'] : '';
+        $pname = isset($_POST['search']) ? $_POST['pname'] : '';
         echo " <input type='submit' name='filter' value='Filter' class='btn btn-primary' />";
         echo '</td></form>';
         echo '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
@@ -98,7 +106,7 @@
                 echo "<td>{$name}</td>";
                 echo isset($_POST['filter']) && $_POST['category'] !== 'all' ? '' : "<td>{$category_name}</td>";
                 echo "<td>{$description}</td>";
-                echo "<td>".number_format($price, 2)."</td>";
+                echo "<td>" . number_format($price, 2) . "</td>";
                 echo "<td>";
                 // read one record
                 echo "<a href='product_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
@@ -119,6 +127,17 @@
     </div> <!-- end .container -->
 
     <!-- confirm delete record will be here -->
+    <script type='text/javascript'>
+        // confirm record deletion
+        function delete_user(id) {
+
+            if (confirm('Are you sure?')) {
+                // if user clicked ok,
+                // pass the id to delete.php and execute the delete query
+                window.location = 'product_delete.php?id=' + id;
+            }
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>

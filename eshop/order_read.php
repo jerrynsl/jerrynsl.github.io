@@ -44,6 +44,7 @@
             echo "<th>Order ID</th>";
             echo "<th>Customer Name</th>";
             echo "<th>Order Create</th>";
+            echo "<th>Action</th>";
 
             echo "</tr>";
 

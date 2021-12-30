@@ -31,7 +31,7 @@
 <body>
 
     <div class="container">
-        <?php include 'navbar.php';?>
+        <?php include 'navbar.php'; ?>
         <div class="page-header">
             <h1>Update Customer</h1>
         </div>
@@ -103,55 +103,57 @@
                 $confirm_new_pass = $_POST['confirm_new_pass'];
                 $flag = 0;
                 $message = '';
-                if(!empty($_FILES['cimg']['name'])){
+                if ($_FILES['cimg']['name'] != $row['customer_img']) {
                     $target_dir = "imagesC/";
-                    unlink($target_dir.$row['cimg']);
+                    if ($row['product_img'] != 'coming_soon_p.png') {
+                        unlink($target_dir . $row['cimg']);
+                    }
                     $target_file = $target_dir . basename($_FILES["cimg"]["name"]);
                     $isUploadOK = TRUE;
                     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
                     $check = getimagesize($_FILES["cimg"]["tmp_name"]);
                     if ($check !== false) {
-                      echo "File is an image - " . $check["mime"] . ".";
-                      $isUploadOK = TRUE;
+                        echo "File is an image - " . $check["mime"] . ".";
+                        $isUploadOK = TRUE;
                     } else {
-                      $flag = 1;
-                      $message .= "File is not an image.<br>";
-                      $isUploadOK = FALSE;
+                        $flag = 1;
+                        $message .= "File is not an image.<br>";
+                        $isUploadOK = FALSE;
                     }
-            
-            
+
+
                     if ($_FILES["cimg"]["size"] > 5000000) {
-                      $flag = 1;
-                      $message .= "Sorry, your file is too large.<br>";
-                      $isUploadOK = FALSE;
+                        $flag = 1;
+                        $message .= "Sorry, your file is too large.<br>";
+                        $isUploadOK = FALSE;
                     }
                     // Allow certain file formats
                     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                      $flag = 1;
-                      $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
-                      $isUploadOK = FALSE;
+                        $flag = 1;
+                        $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+                        $isUploadOK = FALSE;
                     }
                     // Check if $uploadOk is set to 0 by an error
                     if ($isUploadOK == FALSE) {
-                      $flag = 1;
-                      $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
-                    } else {
-                      if (move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file)) {
-                        echo "The file " . basename($_FILES["cimg"]["name"]) . " has been uploaded.";
-                      } else {
                         $flag = 1;
-                        $message .= "Sorry, there was an error uploading your file.<br>";
-                      }
+                        $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
+                    } else {
+                        if (move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file)) {
+                            echo "The file " . basename($_FILES["cimg"]["name"]) . " has been uploaded.";
+                        } else {
+                            $flag = 1;
+                            $message .= "Sorry, there was an error uploading your file.<br>";
+                        }
                     }
-                  }else{
-            
-                    $customer_img=$row['customer_img'];
-                  }
+                } else {
+
+                    $customer_img = $row['customer_img'];
+                }
 
                 if (empty($old_pass) && empty($new_pass) && empty($confirm_new_pass)) {
                     $flag = 0;
                     $unchange_new_password = $row['password'];
-                    $stmt->bindParam(':password', $unchange_new_password);   
+                    $stmt->bindParam(':password', $unchange_new_password);
                 }
 
 
@@ -215,7 +217,7 @@
         <!--we have our html form here where new record information can be updated-->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
             <table class='table table-hover table-responsive table-bordered'>
-            <tr>
+                <tr>
                     <td>Image</td>
 
                     <?php
@@ -226,7 +228,7 @@
                     }
                     echo ' <input type="file" name="cimg" id="fileToUpload" /></td>';
                     ?>
-                   
+
                 </tr>
                 <tr>
                     <td>Username</td>

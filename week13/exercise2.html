@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
+
+</head>
+
+<body>
+    <input type="text" id="mark">
+    <button type="button">Click</button><br><br>
+    Grade: <span id="grade"></span><br><br>
+    Grade Point: <span id="gradepoint"></span><br><br>
+    Remarks: <span id="remarks"></span><br><br>
+
+
+    <script>
+        $(document).ready(function () {
+            $("button").click(function () {
+                var mark = $("#mark").val();
+
+
+                if (mark >= 85 && mark <= 100) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("A+");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("4.00");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Outstanding");
+                }
+                if (mark >= 80 && mark <= 84) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("A");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("4.00");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Excellent");
+                }
+                if (mark >= 75 && mark <= 79) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("A-");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("3.67");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Good");
+                }
+                if (mark >= 70 && mark <= 74) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("B+");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("3.33");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Good");
+                }
+                if (mark >= 65 && mark <= 69) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("B");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("3.00");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Satisfactory");
+                }
+                if (mark >= 60 && mark <= 64) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("B-");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("2.67");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Satisfactory");
+                }
+                if (mark >= 55 && mark <= 59) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("C+");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("2.33");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Pass");
+                }
+                if (mark >= 50 && mark <= 54) {
+                    $("#grade").css("color", "black");
+                    $("#grade").text("C");
+                    $("#gradepoint").css("color", "black");
+                    $("#gradepoint").text("2.00");
+                    $("#remarks").css("color", "black");
+                    $("#remarks").text("Pass");
+                }
+                if (mark >= 45 && mark <= 49) {
+                    $("#grade").css("color", "red");
+                    $("#grade").text("D+");
+                    $("#gradepoint").css("color", "red");
+                    $("#gradepoint").text("1.67");
+                    $("#remarks").css("color", "red");
+                    $("#remarks").text("Sufficiemt for the award of credit");
+                }
+                if (mark >= 40 && mark <= 44) {
+                    $("#grade").css("color", "red");
+                    $("#grade").text("D+");
+                    $("#gradepoint").css("color", "red");
+                    $("#gradepoint").text("1.33");
+                    $("#remarks").css("color", "red");
+                    $("#remarks").text("Sufficiemt for the award of credit");
+                }
+                if (mark >= 30 && mark <= 39) {
+                    $("#grade").css("color", "red");
+                    $("#grade").text("D+");
+                    $("#gradepoint").css("color", "red");
+                    $("#gradepoint").text("1.00");
+                    $("#remarks").css("color", "red");
+                    $("#remarks").text("Fail");
+                }
+                if (mark >= 0 && mark <= 29) {
+                    $("#grade").css("color", "red");
+                    $("#grade").text("D+");
+                    $("#gradepoint").css("color", "red");
+                    $("#gradepoint").text("0.00");
+                    $("#remarks").css("color", "red");
+                    $("#remarks").text("Fail");
+                }
+
+            });
+        });
+
+    </script>
+</body>
+
+</html>

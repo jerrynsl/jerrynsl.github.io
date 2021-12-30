@@ -103,7 +103,7 @@
             }
             else{
 
-                $product_img='';
+                $product_img='coming_soon_p.png';
             }
 
                 if (empty($name)) {

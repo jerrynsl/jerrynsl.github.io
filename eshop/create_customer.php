@@ -11,7 +11,6 @@
   <!-- container -->
   <div class="container">
     <?php
-    include 'session.php';
     include 'navbar.php';
     ?>
     <div class="page-header">
@@ -83,7 +82,7 @@
         }
       }else{
 
-        $customer_img='';
+        $customer_img='no_photo_c.png';
       }
 
 

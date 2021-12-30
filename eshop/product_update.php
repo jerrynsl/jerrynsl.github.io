@@ -122,15 +122,16 @@
                 $flag = 0;
                 $message = '';
 
-                if (!empty($_FILES['product_img']['name'])) {
+                if ($_FILES['product_img']['name']!=$row['product_img']) {
                     $target_dir = "imagesP/";
-                    unlink($target_dir.$row['product_img']);
+                    if($row['product_img']!='coming_soon_p.png'){
+                        unlink($target_dir . $row['product_img']);
+                    }
                     $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
                     $isUploadOK = TRUE;
                     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
                     $check = getimagesize($_FILES["product_img"]["tmp_name"]);
                     if ($check !== false) {
-                        echo "File is an image - " . $check["mime"] . ".";
                         $isUploadOK = TRUE;
                     } else {
                         $flag = 1;
@@ -156,7 +157,7 @@
                         $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
                     } else {
                         if (move_uploaded_file($_FILES["product_img"]["tmp_name"], $target_file)) {
-                            echo "The file " . basename($_FILES["product_img"]["name"]) . " has been uploaded.";
+                           
                         } else {
                             $flag = 1;
                             $message .= "Sorry, there was an error uploading your file.<br>";
@@ -237,16 +238,10 @@
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Image</td>
-
-                    <?php
-                    if ($product_img == '') {
-                        echo '<td>No image<br>';
-                    } else {
-                        echo '<td><img src="imagesP/' . $product_img . '"width="200px"><br>';
-                    }
-                    echo ' <input type="file" name="product_img" id="fileToUpload" /></td>';
-                    ?>
-                   
+                    <td><img src="imagesP/<?php echo $product_img;?>" width="200px"><br>
+                        <input type="file" name="product_img" id="fileToUpload" /><br> 
+                        <button type="button" name="delete" class='btn-danger' >Delete</button>
+                    </td>
                 </tr>
                 <tr>
                     <td>Name</td>
