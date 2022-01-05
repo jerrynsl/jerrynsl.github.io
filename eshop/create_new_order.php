@@ -108,7 +108,7 @@
                                 $stmt->execute();
                             }
                         }
-                        echo "<div class='alert alert-success'>Record was saved. Last Insert ID is $last_id</div>";
+                        echo "<script>location.replace('order_read_one.php?id=".$last_id."')</script>";
                     } else {
                         $message = 'Unable to save record.';
                     }

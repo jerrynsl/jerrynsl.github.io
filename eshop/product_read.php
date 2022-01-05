@@ -129,7 +129,7 @@
     <!-- confirm delete record will be here -->
     <script type='text/javascript'>
         // confirm record deletion
-        function delete_user(id) {
+        function delete_product(id) {
 
             if (confirm('Are you sure?')) {
                 // if user clicked ok,

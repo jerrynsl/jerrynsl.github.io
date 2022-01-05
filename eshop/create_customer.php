@@ -160,7 +160,7 @@
 
           if ($stmt->execute()) {
 
-            echo "<div class='alert alert-success'>Record was saved.</div>";
+            header('Location:index.php');
           } else {
             $flag = 1;
             $message = "Unable to save record.";
@@ -189,11 +189,11 @@
       <table class='table table-hover table-responsive table-bordered'>
         <tr>
           <td>Username</td>
-          <td><input type='text' name='username' class='form-control' /></td>
+          <td><input type='text' name='username' value='<?php if($_POST) {echo $_POST['username'];} ?>' class='form-control' /></td>
         </tr>
         <tr>
           <td>Email</td>
-          <td><input type='email' name='email' class='form-control' /></td>
+          <td><input type='email' name='email' value='<?php if($_POST) {echo $_POST['email'];} ?>'class='form-control' /></td>
         </tr>
         <tr>
           <td>Password</td>
@@ -207,12 +207,12 @@
 
         <tr>
           <td>First Name</td>
-          <td><input type='text' name='fname' class='form-control' /></td>
+          <td><input type='text' name='fname' value='<?php if($_POST) {echo $_POST['fname'];} ?>'class='form-control' /></td>
         </tr>
         <tr>
         <tr>
           <td>Last Name</td>
-          <td><input type='text' name='lname' class='form-control' /></td>
+          <td><input type='text' name='lname' value='<?php if($_POST) {echo $_POST['lname'];} ?>'class='form-control' /></td>
         </tr>
 
         <tr>
@@ -228,7 +228,7 @@
 
         <tr>
           <td>Date of Birth</td>
-          <td><input type='date' name='dob' class='form-control' /></td>
+          <td><input type='date' name='dob' value='<?php if($_POST) {echo $_POST['dob'];} ?>'class='form-control' /></td>
         </tr>
 
         <tr>
