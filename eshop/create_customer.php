@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>PDO - Create a Record - PHP CRUD Tutorial</title>
+  <title>Create Customer</title>
   <!-- Latest compiled and minified Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
@@ -11,7 +11,10 @@
   <!-- container -->
   <div class="container">
     <?php
-    include 'navbar.php';
+    session_start();
+    if (isset($_SESSION['username'])){
+      include 'navbar.php';
+    }
     ?>
     <div class="page-header">
       <h1>Create Customer</h1>
@@ -241,7 +244,13 @@
           <td></td>
           <td>
             <input type='submit' value='Register' class='btn btn-primary' />
-            <a href='read_customer.php' class='btn btn-danger'>Back to Read Customer</a>
+            <?php
+            if (isset($_SESSION['username'])){
+            echo "<a href='read_customer.php' class='btn btn-danger'>Back to Read Customer</a>";
+          }else{
+            echo "<a href='index.php' class='btn btn-danger'>Back to Login Page</a>";
+          }
+            ?>
           </td>
         </tr>
       </table>

@@ -71,69 +71,7 @@
         }
         ?>
 
-        <?php
-        // check if form was submitted
-        if ($_POST) {
-            try {
-                $flag = 0; //0-success
-                $pflag = 0; //0-fail
-                $fail_flag = 0;
-                $message = '';
-
-                for ($a = 0; $a < count($_POST['product']); $a++) {
-                    if (!empty($_POST['product'][$a]) && !empty($_POST['quantity'][$a])) {
-                        $pflag++; //$pflag=1
-
-                    }
-                    if (empty($_POST['product'][$a]) || empty($_POST['quantity'][$a])) {
-                        $fail_flag++; //$pflag=1
-                    }
-                }
-
-                // count(array) !== count(array_unique());
-
-                if (count($_POST['product']) !== count(array_unique($_POST['product']))) {
-
-                    $flag = 1;
-                    $message .= 'Items are duplicate.';
-                }
-                if ($pflag == 0 || $fail_flag > 0) {
-                    $flag = 1;
-                    $message .= 'Please select item and quantity.';
-                }
-                $qdelete = "DELETE FROM order_details WHERE order_id = ?";
-                $stmt = $con->prepare($qdelete);
-                $stmt->bindParam(1, $id);
-
-                if ($flag == 0) {
-                    if ($stmt->execute()) {
-                        for ($c = 0; $c < count($_POST['product']); $c++) {
-                            $qud = 'INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity';
-                            $stmt = $con->prepare($qud);
-                            $stmt->bindParam(':order_id', $id);
-                            $stmt->bindParam(':product_id', $_POST['product'][$c]);
-                            $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
-                            if (!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])) {
-                                $stmt->execute();
-                                echo "<script>location.replace('order_read_one.php?id=".$id."')</script>";
-                            }
-                        }
-                        
-                    } else {
-                        $message .= 'Unable to save record';
-                    }
-                } else {
-                    echo "<div class='alert alert-danger'>" . $message . "</div>";
-                }
-            }
-
-            // show errors
-            catch (PDOException $exception) {
-                die('ERROR: ' . $exception->getMessage());
-            }
-        }
-
-        ?>
+        
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
             <?php
             if ($num > 0) {
@@ -233,6 +171,67 @@
             }
         }, false);
     </script>
+    <?php
+    if ($_POST) {
+        try {
+            $flag = 0; //0-success
+            $pflag = 0; //0-fail
+            $fail_flag = 0;
+            $message = '';
+
+            for ($a = 0; $a < count($_POST['product']); $a++) {
+                if (!empty($_POST['product'][$a]) && !empty($_POST['quantity'][$a])) {
+                    $pflag++; //$pflag=1
+
+                }
+                if (empty($_POST['product'][$a]) || empty($_POST['quantity'][$a])) {
+                    $fail_flag++; //$pflag=1
+                }
+            }
+
+            // count(array) !== count(array_unique());
+
+            if (count($_POST['product']) !== count(array_unique($_POST['product']))) {
+
+                $flag = 1;
+                $message .= 'Items are duplicate.';
+            }
+            if ($pflag == 0 || $fail_flag > 0) {
+                $flag = 1;
+                $message .= 'Please select item and quantity.';
+            }
+            $qdelete = "DELETE FROM order_details WHERE order_id = ?";
+            $stmt = $con->prepare($qdelete);
+            $stmt->bindParam(1, $id);
+
+            if ($flag == 0) {
+                if ($stmt->execute()) {
+                    for ($c = 0; $c < count($_POST['product']); $c++) {
+                        $qud = 'INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity';
+                        $stmt = $con->prepare($qud);
+                        $stmt->bindParam(':order_id', $id);
+                        $stmt->bindParam(':product_id', $_POST['product'][$c]);
+                        $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
+                        if (!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])) {
+                            $stmt->execute();
+                            echo "<script>location.replace('order_read_one.php?id=".$id."')</script>";
+                        }
+                    }
+                    
+                } else {
+                    $message .= 'Unable to save record';
+                }
+            } else {
+                echo "<div class='alert alert-danger'>" . $message . "</div>";
+            }
+        }
+
+        // show errors
+        catch (PDOException $exception) {
+            die('ERROR: ' . $exception->getMessage());
+        }
+    }
+    ?>
 </body>
 
 </html>

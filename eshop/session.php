@@ -4,8 +4,10 @@ session_start();
 
 if(!isset($_SESSION['username'])){
     
-    header('Location:customer_login.php?msg=pleaselogin');
+    header('Location:index.php?msg=pleaselogin');
 
+}else{
+   
 }
 
 

@@ -195,9 +195,10 @@
 
                     for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
 
+                        if($_POST){
                         $product_selected = $pArrayID[$pCount] == $pList[$pRow] ? 'selected' : '';
 
-
+                        }
 
                         echo "<option value='" . $pArrayID[$pCount] . "' $product_selected>" . $pArrayName[$pCount] . "</option>";
                     }

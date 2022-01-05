@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg navbar-dark navbar-sm-light bg-light ">
     <div class="container-sm border ">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +50,23 @@
                 <li class="nav-item ">
                     <a class="nav-link text-primary" href="contact.php">Contact Us</a>
                 </li>
+                <?php 
+                include 'session.php';
+                include 'navbar.php';
+                include 'config/database.php';
+        
+                if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+                    $query = 'SELECT username, customer_photo from customers WHERE email= ?';
+                } else {
+                    $query = 'SELECT username, customer_photo FROM customers WHERE username=?';
+                }
+        
+                $stmt = $con->prepare($query);
+                $stmt->bindParam(1, $_SESSION['username']);
+                $stmt->execute();
+                
+                ?>
+
                 <li class="nav-item ">
                     <a class="nav-link text-primary" href="logout.php">Log Out</a>
                 </li>
