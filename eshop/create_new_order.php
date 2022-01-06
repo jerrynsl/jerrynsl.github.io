@@ -108,7 +108,7 @@
                                 $stmt->execute();
                             }
                         }
-                        echo "<script>location.replace('order_read_one.php?id=".$last_id."')</script>";
+                        echo "<script>location.replace('order_read_one.php?id=".$last_id."&action=crtsuccess')</script>";
                     } else {
                         $message = 'Unable to save record.';
                     }

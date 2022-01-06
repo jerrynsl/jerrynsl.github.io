@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>PDO - Read One Record - PHP CRUD Tutorial</title>
+    <title>Read Order</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
@@ -30,6 +30,14 @@
         //include database connection
         include 'config/database.php';
 
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+
+        // if it was redirected from delete.php
+        if ($action == 'updsuccess') {
+            echo "<div class='alert alert-success'>Order was updated.</div>";
+        }else if($action == 'crtsuccess'){
+            echo "<div class='alert alert-success'>Order was added.</div>";
+        }
         // read current record's data
         try {
             // prepare select query
@@ -53,6 +61,7 @@
             $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
             $fname = $row2['fname'];
             $lname = $row2['lname'];
+            $order_create = $row2['order_create'];
 
             // values to fill up our form
             if ($num > 0) {
@@ -65,6 +74,8 @@
                 echo "<th>Customer Name</th><td>" . $fname . " " . $lname . "</td>";
                 echo "</tr>";
                 echo "<tr>";
+                echo "<th>Order Create</th><td>".$order_create."</td>";
+                echo "<tr";
                 echo "</table>";
 
                 echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
@@ -81,9 +92,9 @@
 
                     echo "<tr>";
                     echo "<td>" . $row['name'] . "</td>";
-                    echo "<td>" . $row['price'] . "</td>";
+                    echo "<td>" .number_format($row['price'],2) . "</td>";
                     echo "<td>" . $row['quantity'] . "</td>";
-                    echo "<td>$items_total</td>";
+                    echo "<td>".number_format($items_total,2)."</td>";
                     echo "</tr>";
                     
                     $grand_total=$grand_total+$items_total;
@@ -91,12 +102,12 @@
 
                 echo "<tr>";
                 echo "<th colspan='3' class='text-end'>Grand Total:</th>";
-                echo "<td class='col'>$grand_total</td>";
+                echo "<td class='col'>".number_format($grand_total,2)."</td>";
                 echo "</tr>";
 
                 echo "<tr>";
-                echo "<td colspan='4'><a href='order_read.php' class='btn btn-danger'>Back to read order</a>";
                 echo "<a href='order_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<td colspan='4'><a href='order_read.php' class='btn btn-danger'>Back to order list</a>";
                 echo "</td>";
                 echo "</tr>";
                 echo "</table>";

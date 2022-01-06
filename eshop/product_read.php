@@ -11,7 +11,9 @@
 <body>
     <!-- container -->
     <div class="container">
-        <?php include 'navbar.php'; ?>
+        <?php 
+        include 'session.php';
+        include 'navbar.php'; ?>
 
         <div class="page-header">
             <h1>Read Products</h1>
@@ -31,13 +33,13 @@
 
 
 
-        $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id ORDER BY id DESC";
+        $query = "SELECT products.id, products.name, products.description, products.product_img, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id ORDER BY id DESC";
         $stmt = $con->prepare($query);
 
         // select all data  
         if (isset($_POST['filter'])) {
             if ($_POST['category'] != 'all') {
-                $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE categories.category_id=:category_id ORDER BY id DESC";
+                $query = "SELECT products.id, products.name, products.description, products.product_img products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE categories.category_id=:category_id ORDER BY id DESC";
                 $stmt = $con->prepare($query);
                 $stmt->bindParam(":category_id", $_POST['category']);
             }
@@ -47,7 +49,7 @@
                 echo "<div class='alert alert-danger'>Please insert value</div>";
             }
             $pname = "%" . $_POST['pname'] . "%";
-            $query = "SELECT products.id, products.name, products.description, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE products.name LIKE :name ORDER BY id DESC";
+            $query = "SELECT products.id, products.name, products.description, products.product_img, products.price, categories.category_name FROM products INNER JOIN categories ON products.category_id=categories.category_id WHERE products.name LIKE :name ORDER BY id DESC";
             $stmt = $con->prepare($query);
             $stmt->bindParam(":name", $pname);
         }
@@ -92,6 +94,7 @@
             echo "<tr>";
             echo "<th>ID</th>";
             echo "<th>Name</th>";
+            echo "<th>Photo</th>";
             echo isset($_POST['filter']) && $_POST['category'] !== 'all' ? '' : "<th>Category</th>";
             echo "<th>Description</th>";
             echo "<th>Price</th>";
@@ -104,6 +107,7 @@
                 echo "<tr>";
                 echo "<td>{$id}</td>";
                 echo "<td>{$name}</td>";
+                echo "<td><img src='imagesP/{$product_img}' width='200px'></td>";
                 echo isset($_POST['filter']) && $_POST['category'] !== 'all' ? '' : "<td>{$category_name}</td>";
                 echo "<td>{$description}</td>";
                 echo "<td>" . number_format($price, 2) . "</td>";
