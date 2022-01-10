@@ -9,12 +9,13 @@
 </head>
 
 <body>
+    <?php
+    include 'session.php';
+    include 'navbar.php'; ?>
     <!-- container -->
     <div class="container">
-    
-    <?php 
-        include 'session.php';
-        include 'navbar.php'; ?>
+
+
         <div class="page-header">
             <h1>Read Order</h1>
         </div>
@@ -48,7 +49,7 @@
             echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
 
             //creating our table heading
-            echo "<tr>";
+            echo "<tr class=''>";
             echo "<th>Order ID</th>";
             echo "<th>Customer Name</th>";
             echo "<th>Order Create</th>";
@@ -68,17 +69,16 @@
                 echo "<td>" . $row['order_create'] . "</td>";
                 echo "<td>";
                 // read one record
-                $order_id=$row['order_id'];
-                echo "<a href='order_read_one.php?id=" . $row['order_id'] . "' class='btn btn-info m-r-1em'>Read</a>";
+                $order_id = $row['order_id'];
+                echo "<a href='order_read_one.php?id=" . $row['order_id'] . "' class='btn btn-info m-3'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='order_update.php?id=" . $row['order_id'] . "' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='order_update.php?id=" . $row['order_id'] . "' class='btn btn-primary m-3'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_order({$order_id});'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
-
             }
 
 
@@ -104,7 +104,7 @@
                 window.location = 'order_delete.php?id=' + order_id;
             }
         }
-    </script>   
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 

@@ -8,9 +8,12 @@
 </head>
 
 <body>
-
+    <?php 
+     include 'session.php';
+    include 'navbar.php';
+    ?>
     <div class="container">
-        <?php include 'navbar.php'; ?>
+
         <div class="page-header">
             <h1>Update Product</h1>
         </div>
@@ -103,8 +106,8 @@
 
                 if (!empty($_FILES['product_img']['name'])) {
                     $target_dir = "imagesP/";
-                    if($row['product_img']!='coming_soon_p.png'){
-                    unlink($target_dir . $row['product_img']);
+                    if ($row['product_img'] != 'coming_soon_p.png') {
+                        unlink($target_dir . $row['product_img']);
                     }
                     $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
                     $isUploadOK = TRUE;
@@ -136,7 +139,6 @@
                         $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
                     } else {
                         if (move_uploaded_file($_FILES["product_img"]["tmp_name"], $target_file)) {
-                           
                         } else {
                             $flag = 1;
                             $message .= "Sorry, there was an error uploading your file.<br>";
@@ -208,22 +210,21 @@
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
-        } 
-        
-        if(isset($_POST['delete_img'])){
+        }
+
+        if (isset($_POST['delete_img'])) {
             $target_dir = "imagesP/";
             unlink($target_dir . $row['product_img']);
             $product_img = 'coming_soon_p.png';
             $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
 
-            $deleteQ='UPDATE products SET product_img=:product_img WHERE id = :id';
+            $deleteQ = 'UPDATE products SET product_img=:product_img WHERE id = :id';
             $stmt = $con->prepare($deleteQ);
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':product_img', $product_img);
             $stmt->execute();
-
         }
-        
+
         ?>
 
 
@@ -233,73 +234,74 @@
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Image</td>
-                    <td><img src="imagesP/<?php echo $product_img;?>" width="200px"><br>
+                    <td><img src="imagesP/<?php echo $product_img; ?>" width="200px"><br>
                         <input type="file" name="product_img" id="fileToUpload" />
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
-                            <input type="submit" class="btn btn-danger" name="delete_img" value='Delete Photo' /></td>
-                        </form>
+                            <input type="submit" class="btn btn-danger" name="delete_img" value='Delete Photo' />
                     </td>
-                </tr>
-                <tr>
-                    <td>Name</td>
-                    <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Category</td>
-                    <td>
-                        <?php
+        </form>
+        </td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
+            <td>Category</td>
+            <td>
+                <?php
 
-                        $selected = '';
-                        echo '<select class="fs-4 rounded" id="" name="category">';
-                        echo  '<option selected></option>';
+                $selected = '';
+                echo '<select class="fs-4 rounded" id="" name="category">';
+                echo  '<option selected></option>';
 
-                        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 
 
-                            if ($_POST) {
-                                $selected = $row['category_id'] == $_POST['category'] ? 'selected' : '';
-                            } else {
+                    if ($_POST) {
+                        $selected = $row['category_id'] == $_POST['category'] ? 'selected' : '';
+                    } else {
 
-                                $selected = $row['category_id'] == $product_category_id ? 'selected' : '';
-                            }
+                        $selected = $row['category_id'] == $product_category_id ? 'selected' : '';
+                    }
 
-                            echo "<option value='" . $row['category_id'] . "' " . $selected . ">" . $row['category_name'] . "</option>";
-                        }
+                    echo "<option value='" . $row['category_id'] . "' " . $selected . ">" . $row['category_name'] . "</option>";
+                }
 
-                        echo "</select>";
+                echo "</select>";
 
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
-                </tr>
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
+        </tr>
 
-                <tr>
-                    <td>Price</td>
-                    <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Promotion Price</td>
-                    <td><input type='text' name='promo_price' value="<?php echo htmlspecialchars($promo_price, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Manufacture Date</td>
-                    <td><input type='date' name='manu_date' value="<?php echo htmlspecialchars($manu_date, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Expired Date</td>
-                    <td><input type='date' name='exp_date' value="<?php echo htmlspecialchars($exp_date, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type='submit' value='Save Changes' class='btn btn-primary' />
-                        <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
-                    </td>
-                </tr>
-            </table>
+        <tr>
+            <td>Price</td>
+            <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
+            <td>Promotion Price</td>
+            <td><input type='text' name='promo_price' value="<?php echo htmlspecialchars($promo_price, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
+            <td>Manufacture Date</td>
+            <td><input type='date' name='manu_date' value="<?php echo htmlspecialchars($manu_date, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
+            <td>Expired Date</td>
+            <td><input type='date' name='exp_date' value="<?php echo htmlspecialchars($exp_date, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type='submit' value='Save Changes' class='btn btn-primary' />
+                <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
+            </td>
+        </tr>
+        </table>
         </form>
 
 

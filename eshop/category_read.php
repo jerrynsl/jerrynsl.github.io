@@ -5,16 +5,17 @@
     <title>Read Category</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  
+
 </head>
 
 <body>
+    <?php
+    include 'session.php';
+    include 'navbar.php'; ?>
     <!-- container -->
     <div class="container">
-    <?php 
-        include 'session.php';
-        include 'navbar.php'; ?>
-    
+
+
         <div class="page-header">
             <h1>Read Category</h1>
         </div>
@@ -29,7 +30,7 @@
         // if it was redirected from delete.php
         if ($action == 'deleted') {
             echo "<div class='alert alert-success'>Category was deleted.</div>";
-        }else if($action == 'deny'){
+        } else if ($action == 'deny') {
             echo "<div class='alert alert-danger'>Category is cannot delete when product is selected current category</div>";
         }
 
@@ -41,7 +42,7 @@
         // this is how to get number of rows returned
         $num = $stmt->rowCount();
 
-        
+
         // link to create record form
         echo "<a href='category_create.php' class='btn btn-primary m-b-1em'>Create New Category</a>";
 
@@ -69,13 +70,13 @@
                 echo "<td>{$category_description}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='category_read_one.php?id={$category_id}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='category_read_one.php?id={$category_id}' class='btn btn-info m-r-1em m-3'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='category_update.php?id={$category_id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='category_update.php?id={$category_id}' class='btn btn-primary m-r-1em m-3'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_category({$category_id});'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_category({$category_id});'  class='btn btn-danger m-3'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }

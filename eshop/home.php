@@ -2,17 +2,19 @@
 <html>
 
 <head>
-    <title>PDO - Create a Record - PHP CRUD Tutorial</title>
+    <title>Home</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 
 <body>
+    <?php
+    include 'session.php';
+    include 'navbar.php';
+    ?>
     <!-- container -->
     <div class="container">
         <?php
-        include 'session.php';
-        include 'navbar.php';
         include 'config/database.php';
 
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
@@ -50,24 +52,32 @@
         $stmtLast->execute();
         $numLast=$stmtLast->rowCount();
 
+        $qTotalCus='SELECT * FROM customers';
+        $stmtOrder = $con->prepare($qTotalCus);
+        $stmtOrder->execute();
+        $totalCus = $stmtOrder->rowCount();
+
         ?>
         <div class="page-header">
             <h1>Home</h1>
             <h2>Welcome! <?php echo $a; ?></h2>
         </div>
+        <br>
 
-        <table class='table table-hover table-responsive table-bordered'>
+        <table class='table table-hover table-responsive table-bordered' style="width: 50%; margin:auto; text-align:center;">
         <tr>
-            <td class='text-end'>Total Order:</td>
+            <td class=''>Total Order:</td>
             <td><?php echo $numOrder?></td>
         </tr>
         <tr>
-            <td class='text-end'>Total Customer:</td>
-            <td><?php echo $numCustomer?></td>
+            <td class=''>Total Customer:</td>
+            <td><?php echo $totalCus?></td>
         </tr>
 
         </table>
-        <h3>Last Order</h3>
+        <br>
+        <h3 class='text-center'>Last Order</h3>
+        <br>
         <?php
         if($numLast>0){
            while($rowLast=$stmtLast->fetch(PDO::FETCH_ASSOC)){
@@ -76,7 +86,7 @@
             $create=$rowLast['order_create'];
         
            
-            echo "<table class='table table-hover table-responsive table-bordered'>";
+            echo "<table class='table table-hover table-responsive table-bordered' style='width: 50%; margin:auto; text-align:center;'>";
             echo "<tr>";
             echo "<th>Order ID</th><td>" . $order_id . "</td>";
             echo "</tr>";
@@ -84,7 +94,11 @@
             echo "<th>Order Create Date</th><td>" . $create . "</td>";
             echo "</tr>";
             echo "</table>";
-           }
+            echo '<div class="d-grid gap-2 col-2 mx-auto">';
+            echo "<a href='order_read_one.php?id={$order_id}' class='btn btn-primary justify-content-md-center'>Read Order</a>";
+            echo '</div>';
+        }
+
           
         
         }

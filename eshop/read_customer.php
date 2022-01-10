@@ -9,12 +9,13 @@
 </head>
 
 <body>
+<?php 
+        include 'session.php';
+        include 'navbar.php'; ?>
     <!-- container -->
     <div class="container">
 
-    <?php 
-        include 'session.php';
-        include 'navbar.php'; ?>
+   
 
         <div class="page-header">
             <h1>Read Customer</h1>
@@ -78,13 +79,13 @@
 
                 // read one record
                 $username=$row['username'];
-                echo "<td><a href='read_one_customer.php?id={$username}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<td><a href='read_one_customer.php?id={$username}' class='btn btn-info m-r-1em m-3'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='update_customer.php?id={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='update_customer.php?id={$username}' class='btn btn-primary m-r-1em m-3'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_customer(\"{$username}\");'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_customer(\"{$username}\");'  class='btn btn-danger m-3'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }

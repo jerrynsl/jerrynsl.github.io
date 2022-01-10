@@ -10,13 +10,13 @@
 </head>
 
 <body>
-
-    <!-- container -->
-    <div class="container">
-        <?php
+    <?php
         include 'session.php';
         include 'navbar.php';
         ?>
+    <!-- container -->
+    <div class="container">
+        
         <div class="page-header">
             <h1>Read Order</h1>
         </div>
@@ -78,11 +78,11 @@
                 echo "<tr";
                 echo "</table>";
 
-                echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+                echo "<table class='table table-hover table-responsive table-bordered text-center'>"; //start table
                 echo "<th>Product Name</th>";
                 echo "<th>Price Per Item</th>";
                 echo "<th>Quantity</th>";
-                echo "<th>Total Price</th>";
+                echo "<th class='text-end'>Total Price</th>";
                 echo "</tr>";
                 $grand_total=0;
                 // retrieve our table contents
@@ -94,7 +94,7 @@
                     echo "<td>" . $row['name'] . "</td>";
                     echo "<td>" .number_format($row['price'],2) . "</td>";
                     echo "<td>" . $row['quantity'] . "</td>";
-                    echo "<td>".number_format($items_total,2)."</td>";
+                    echo "<td class='text-end'>".number_format($items_total,2)."</td>";
                     echo "</tr>";
                     
                     $grand_total=$grand_total+$items_total;
@@ -102,7 +102,7 @@
 
                 echo "<tr>";
                 echo "<th colspan='3' class='text-end'>Grand Total:</th>";
-                echo "<td class='col'>".number_format($grand_total,2)."</td>";
+                echo "<td class='col text-end'>".number_format($grand_total,2)."</td>";
                 echo "</tr>";
 
                 echo "<tr>";

@@ -2,18 +2,19 @@
 <html>
 
 <head>
-    <title>PDO - Create a Record - PHP CRUD Tutorial</title>
+    <title>Create Order</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 
 <body>
-    <!-- container -->
-    <div class="container">
     <?php 
     include 'session.php';
     include 'navbar.php';
     ?>
+    <!-- container -->
+    <div class="container">
+    
         <div class="page-header">
             <h1>Create New Order</h1>
         </div>
@@ -135,7 +136,7 @@
                         <?php
 
                         $selected = '';
-                        echo '<select class="fs-4 rounded" id="" name="customer">';
+                        echo '<select class="rounded form-select" id="" name="customer">';
                         echo  '<option selected></option>';
 
                         while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
@@ -188,7 +189,7 @@
 
                     echo "<tr class='pRow'>";
 
-                    echo '<td><select class="fs-4 rounded" id="" name="product[]">';
+                    echo '<td><select class="form-select rounded" id="" name="product[]">';
                     echo  '<option class="bg-white"></option>';
 
                     $pList = $_POST ? $_POST['product'] : '[]';
@@ -206,7 +207,7 @@
                     echo "</select>";
 
                     echo "<td>";
-                    echo '<select class="w-25 fs-4 rounded" name="quantity[]" >';
+                    echo '<select class="w-25 form-select rounded" name="quantity[]" >';
                     echo "<option></option>";
                     for ($quantity = 1; $quantity <= 5; $quantity++) {
                         $selected_quantity = $quantity == $_POST['quantity'][$pRow] ? 'selected' : '';

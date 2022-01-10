@@ -8,11 +8,11 @@
 </head>
 
 <body>
-
-    <div class="container">
-        <?php 
+<?php 
         include 'session.php';
         include 'navbar.php'; ?>
+    <div class="container">
+       
         <div class="page-header">
             <h1>Update Customer</h1>
         </div>

@@ -8,9 +8,11 @@
 </head>
 
 <body>
-
+    <?php 
+    include 'session.php';
+    include 'navbar.php'; ?>
     <div class="container">
-        <?php include 'navbar.php';?>
+
         <div class="page-header">
             <h1>Update Category</h1>
         </div>
@@ -75,18 +77,18 @@
                     $message = 'Please enter category name.';
                 }
                 if ($flag == 0) {
-                $query = "UPDATE categories
+                    $query = "UPDATE categories
                   SET category_name=:category_name, category_description=:category_description WHERE category_id = :category_id";
-                // prepare query for excecution
-                $stmt = $con->prepare($query);
-                // posted values
-                $cname = htmlspecialchars(strip_tags($_POST['name']));
-                $cdescription = htmlspecialchars(strip_tags($_POST['description']));
-                // bind the parameters
-                $stmt->bindParam(':category_name', $cname);
-                $stmt->bindParam(':category_description', $cdescription);
-                $stmt->bindParam(':category_id', $id);
-                // Execute the query
+                    // prepare query for excecution
+                    $stmt = $con->prepare($query);
+                    // posted values
+                    $cname = htmlspecialchars(strip_tags($_POST['name']));
+                    $cdescription = htmlspecialchars(strip_tags($_POST['description']));
+                    // bind the parameters
+                    $stmt->bindParam(':category_name', $cname);
+                    $stmt->bindParam(':category_description', $cdescription);
+                    $stmt->bindParam(':category_id', $id);
+                    // Execute the query
 
                     if ($stmt->execute()) {
                         echo "<div class='alert alert-success'>Record was saved.</div>";

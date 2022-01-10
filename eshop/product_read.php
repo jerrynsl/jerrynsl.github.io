@@ -2,18 +2,20 @@
 <html>
 
 <head>
-    <title>PDO - Create a Record - PHP CRUD Tutorial</title>
+    <title>Read Product</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
 </head>
 
 <body>
+    <?php 
+        include 'session.php';
+        include 'navbar.php'; 
+        ?>
     <!-- container -->
     <div class="container">
-        <?php 
-        include 'session.php';
-        include 'navbar.php'; ?>
+        
 
         <div class="page-header">
             <h1>Read Products</h1>
@@ -65,7 +67,7 @@
         echo "<td><a href='product_create.php' class='btn btn-primary m-b-1em'>Create New Product</a></td>";
         echo '<td><form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
         $selected = '';
-        echo '<select class="fs-4 rounded" id="" name="category">';
+        echo '<select class="rounded form-control" id="" name="category">';
         echo  '<option value="all" >All</option>';
 
         while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
@@ -76,10 +78,10 @@
 
             echo "<option value='" . $row['category_id'] . "' " . $selected . ">" . $row['category_name'] . "</option>";
         }
-        echo "</select>";
+        echo "</select></td>";
 
         $pname = isset($_POST['search']) ? $_POST['pname'] : '';
-        echo " <input type='submit' name='filter' value='Filter' class='btn btn-primary' />";
+        echo "<td> <input type='submit' name='filter' value='Filter' class='btn btn-primary' />";
         echo '</td></form>';
         echo '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
         echo "<td><input type='text' name='pname' value='$pname' /> <input type='submit' name='search' value='Search' class='btn btn-danger' /></td>";
@@ -91,7 +93,7 @@
             echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
 
             //creating our table heading
-            echo "<tr>";
+            echo "<tr class='text-center'>";
             echo "<th>ID</th>";
             echo "<th>Name</th>";
             echo "<th>Photo</th>";
@@ -112,14 +114,9 @@
                 echo "<td>{$description}</td>";
                 echo "<td class='text-end'>" . number_format($price, 2) . "</td>";
                 echo "<td>";
-                // read one record
-                echo "<a href='product_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
-
-                // we will use this links on next part of this post
-                echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
-
-                // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_product({$id});'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='product_read_one.php?id={$id}' class='btn btn-info m-r-1em m-3'>Read</a>";
+                echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em m-3'>Edit</a>";
+                echo "<a href='#' onclick='delete_product({$id});'  class='btn btn-danger m-3'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }

@@ -8,13 +8,14 @@
 </head>
 
 <body>
+    <?php
+    include 'session.php';
+    include 'navbar.php';
+
+    ?>
     <!-- container -->
     <div class="container">
-        <?php
-        include 'session.php';
-        include 'navbar.php';
 
-        ?>
         <div class="page-header">
             <h1>Create Product</h1>
         </div>
@@ -48,7 +49,7 @@
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':category_id', $category);
                 $stmt->bindParam(':description', $description);
-                $stmt->bindParam(':product_img',$product_img);
+                $stmt->bindParam(':product_img', $product_img);
                 $stmt->bindParam(':price', $price);
                 $created = date('Y-m-d H:i:s'); // get the current date and time
                 $stmt->bindParam(':created', $created);
@@ -60,51 +61,49 @@
                 $flag = 0;
                 $message = '';
 
-                if(!empty($_FILES['product_img']['name'])){
-                $target_dir = "imagesP/";
-                $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
-                $isUploadOK = TRUE;
-                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-                $check = getimagesize($_FILES["product_img"]["tmp_name"]);
+                if (!empty($_FILES['product_img']['name'])) {
+                    $target_dir = "imagesP/";
+                    $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
+                    $isUploadOK = TRUE;
+                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                    $check = getimagesize($_FILES["product_img"]["tmp_name"]);
                     if ($check !== false) {
                         echo "File is an image - " . $check["mime"] . ".";
                         $isUploadOK = TRUE;
                     } else {
-                        $flag=1;
+                        $flag = 1;
                         $message .= "File is not an image.<br>";
                         $isUploadOK = FALSE;
-                       
                     }
-            
 
-                if ($_FILES["product_img"]["size"] > 5000000) {
-                    $flag=1;
-                    $message .= "Sorry, your file is too large.<br>";
-                    $isUploadOK = FALSE;
-                }
-                // Allow certain file formats
-                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-                    $flag=1;
-                    $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
-                    $isUploadOK = FALSE;
-                }
-                // Check if $uploadOk is set to 0 by an error
-                if ($isUploadOK == FALSE) {
-                    $flag=1;
-                    $message .= "Sorry, your file was not uploaded.";// if everything is ok, try to upload file
-                } else {
-                    if (move_uploaded_file($_FILES["product_img"]["tmp_name"], $target_file)) {
-                        echo "The file ". basename( $_FILES["product_img"]["name"]). " has been uploaded.";
+
+                    if ($_FILES["product_img"]["size"] > 5000000) {
+                        $flag = 1;
+                        $message .= "Sorry, your file is too large.<br>";
+                        $isUploadOK = FALSE;
+                    }
+                    // Allow certain file formats
+                    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+                        $flag = 1;
+                        $message .= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+                        $isUploadOK = FALSE;
+                    }
+                    // Check if $uploadOk is set to 0 by an error
+                    if ($isUploadOK == FALSE) {
+                        $flag = 1;
+                        $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
                     } else {
-                        $flag=1;
-                        $message .= "Sorry, there was an error uploading your file.<br>";
+                        if (move_uploaded_file($_FILES["product_img"]["tmp_name"], $target_file)) {
+                            echo "The file " . basename($_FILES["product_img"]["name"]) . " has been uploaded.";
+                        } else {
+                            $flag = 1;
+                            $message .= "Sorry, there was an error uploading your file.<br>";
+                        }
                     }
-                }
-            }
-            else{
+                } else {
 
-                $product_img='coming_soon_p.png';
-            }
+                    $product_img = 'coming_soon_p.png';
+                }
 
                 if (empty($name)) {
 
@@ -204,7 +203,7 @@
                 </tr>
                 <tr>
                     <td>Select image to upload:</td>
-                    <td> <input type="file" name="product_img" id="fileToUpload"/>
+                    <td> <input type="file" name="product_img" id="fileToUpload" />
                     </td>
                 </tr>
                 <tr>

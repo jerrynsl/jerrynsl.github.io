@@ -1,11 +1,12 @@
 
-<nav class="navbar navbar-expand-lg navbar-dark navbar-sm-light bg-light ">
-    <div class="container-sm border d-flex">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-sm-primary" style="background-color: #B8E6E6;">
+    <div class="container-sm d-flex">
+    <a class="navbar-brand" href="home.php">Jerry Shop</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon "></span>
         </button>
-        <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav justify-content-end ">
+        <div class="collapse navbar-collapse row" id="navbarSupportedContent">
+            <ul class="navbar-nav col justify-content-end ">
                 <li class="nav-item">
                     <a class="nav-link active text-primary" aria-current="page" href="home.php">Home</a>
                 </li>
@@ -14,8 +15,8 @@
                         Products
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-primary" href="product_create.php">Create Product</a></li>
-                        <li><a class="dropdown-item text-primary" href="product_read.php">Read Product</a></li>
+                        <li><a class="dropdown-item" href="product_create.php">Create Product</a></li>
+                        <li><a class="dropdown-item" href="product_read.php">Read Product</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -23,8 +24,8 @@
                         Orders
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-primary" href="create_new_order.php">Create Order</a></li>
-                        <li><a class="dropdown-item text-primary" href="order_read.php">Read Order</a></li>
+                        <li><a class="dropdown-item" href="create_new_order.php">Create Order</a></li>
+                        <li><a class="dropdown-item" href="order_read.php">Read Order</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -32,8 +33,8 @@
                         Categories
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-primary" href="category_create.php">Create Categories</a></li>
-                        <li><a class="dropdown-item text-primary" href="category_read.php">Read Categories</a></li>
+                        <li><a class="dropdown-item" href="category_create.php">Create Categories</a></li>
+                        <li><a class="dropdown-item" href="category_read.php">Read Categories</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -41,12 +42,12 @@
                         Customers
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-primary" href="create_customer.php">Create Customer</a></li>
-                        <li><a class="dropdown-item text-primary" href="read_customer.php">Read Customer</a></li>
+                        <li><a class="dropdown-item" href="create_customer.php">Create Customer</a></li>
+                        <li><a class="dropdown-item" href="read_customer.php">Read Customer</a></li>
                     </ul>
                 </li>
                 </ul>
-                <ul class="navbar-nav justify-content-end ">
+                <ul class="navbar-nav col justify-content-end ">
                 <?php 
                 include 'config/database.php';
         
@@ -71,8 +72,8 @@
                 echo '<a class="nav-link dropdown-toggle text-primary"  id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 '.$username.'</a>';
                 echo '<ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
-                echo '<li><a class="dropdown-item text-primary" href="update_customer.php?id='.$username.'">Edit Profile</a></li>';
-                echo '<li><a class="nav-link text-primary" href="logout.php">Log Out</a></li>';
+                echo '<li><a class="dropdown-item" href="update_customer.php?id='.$username.'">Edit Profile</a></li>';
+                echo '<li><a class="nav-link text-danger" href="logout.php">Log Out</a></li>';
                 echo '</ul>';
                 echo '</li>';
                 }

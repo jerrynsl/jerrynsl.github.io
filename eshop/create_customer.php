@@ -8,14 +8,15 @@
 </head>
 
 <body>
-  <!-- container -->
-  <div class="container">
-    <?php
+<?php
     session_start();
     if (isset($_SESSION['username'])){
       include 'navbar.php';
     }
     ?>
+  <!-- container -->
+  <div class="container">
+    
     <div class="page-header">
       <h1>Create Customer</h1>
     </div>

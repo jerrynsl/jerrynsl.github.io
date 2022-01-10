@@ -10,13 +10,13 @@
 </head>
 
 <body>
-
-    <!-- container -->
-    <div class="container">
     <?php 
     include 'session.php';
     include 'navbar.php';
     ?>
+    <!-- container -->
+    <div class="container">
+   
         <div class="page-header">
             <h1>Read Category</h1>
         </div>

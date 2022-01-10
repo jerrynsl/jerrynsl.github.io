@@ -7,132 +7,132 @@
 </head>
 
 <body>
+    <?php
+    include 'session.php';
+    include 'navbar.php';
+    ?>
     <div class="container">
-        <?php
-        include 'session.php';
-        include 'navbar.php';
-        ?>
+
         <div class="page-header">
             <h1>Update Order</h1>
         </div>
-<?php
+        <?php
 
-include 'config/database.php';
-$arrayP = array('');
-$id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
-if ($_POST) {
+        include 'config/database.php';
+        $arrayP = array('');
+        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+        if ($_POST) {
 
-    $flag = 0; //0-success
-    $pflag = 0; //0-fail
-    $fail_flag = 0;
-    $message = '';
+            $flag = 0; //0-success
+            $pflag = 0; //0-fail
+            $fail_flag = 0;
+            $message = '';
 
-    //remove the empty rows (product and quantity)
-    for ($y = 0; $y <= count($_POST['product']); $y++) {
-        if (empty($_POST['product'][$y])  && empty($_POST['quantity'][$y])) {
+            //remove the empty rows (product and quantity)
+            for ($y = 0; $y <= count($_POST['product']); $y++) {
+                if (empty($_POST['product'][$y])  && empty($_POST['quantity'][$y])) {
 
-            unset($_POST['product'][$y]);
-            unset($_POST['quantity'][$y]);
-        }
+                    unset($_POST['product'][$y]);
+                    unset($_POST['quantity'][$y]);
+                }
 
-        if (count($_POST['product']) == 0) {
-            $arrayP = array('');
-        } else {
+                if (count($_POST['product']) == 0) {
+                    $arrayP = array('');
+                } else {
 
-            $arrayP = $_POST['product'];
-        }
-    }
+                    $arrayP = $_POST['product'];
+                }
+            }
 
-    //make sure either one of the product and quantity is not empty
-    for ($a = 0; $a < count($_POST['product']); $a++) {
-        if (!empty($_POST['product'][$a]) && !empty($_POST['quantity'][$a])) {
-            $pflag++; //$pflag=1
+            //make sure either one of the product and quantity is not empty
+            for ($a = 0; $a < count($_POST['product']); $a++) {
+                if (!empty($_POST['product'][$a]) && !empty($_POST['quantity'][$a])) {
+                    $pflag++; //$pflag=1
 
-        }
-        if (empty($_POST['product'][$a]) || empty($_POST['quantity'][$a])) {
-            $fail_flag++; //$pflag=1
-        }
-    }
-    //products duplicate
-    if (count($_POST['product']) !== count(array_unique($_POST['product']))) {
+                }
+                if (empty($_POST['product'][$a]) || empty($_POST['quantity'][$a])) {
+                    $fail_flag++; //$pflag=1
+                }
+            }
+            //products duplicate
+            if (count($_POST['product']) !== count(array_unique($_POST['product']))) {
 
-        $flag = 1;
-        $message .= 'Items are duplicate.';
-    }
-    if ($pflag == 0 || $fail_flag > 0) {
-        $flag = 1;
-        $message .= 'Please select item and quantity.';
-    }
-    if ($flag == 0) {
-
-        
-        try {
-            $qdelete = "DELETE FROM order_details WHERE order_id = ?";
-            $stmt = $con->prepare($qdelete);
-            $stmt->bindParam(1, $id);
+                $flag = 1;
+                $message .= 'Items are duplicate.';
+            }
+            if ($pflag == 0 || $fail_flag > 0) {
+                $flag = 1;
+                $message .= 'Please select item and quantity.';
+            }
+            if ($flag == 0) {
 
 
-            if ($stmt->execute()) {
-                for ($c = 0; $c < count($_POST['product']); $c++) {
-                    $qud = 'INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity';
-                    $stmt = $con->prepare($qud);
-                    $stmt->bindParam(':order_id', $id);
-                    $stmt->bindParam(':product_id', $_POST['product'][$c]);
-                    $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
-                    if (!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])) {
-                        $stmt->execute();
-                        echo "<script>location.replace('order_read_one.php?id=" . $id . "&action=updsuccess')</script>";
+                try {
+                    $qdelete = "DELETE FROM order_details WHERE order_id = ?";
+                    $stmt = $con->prepare($qdelete);
+                    $stmt->bindParam(1, $id);
+
+
+                    if ($stmt->execute()) {
+                        for ($c = 0; $c < count($_POST['product']); $c++) {
+                            $qud = 'INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity';
+                            $stmt = $con->prepare($qud);
+                            $stmt->bindParam(':order_id', $id);
+                            $stmt->bindParam(':product_id', $_POST['product'][$c]);
+                            $stmt->bindParam(':quantity', $_POST['quantity'][$c]);
+                            if (!empty($_POST['product'][$c]) && !empty($_POST['quantity'][$c])) {
+                                $stmt->execute();
+                                echo "<script>location.replace('order_read_one.php?id=" . $id . "&action=updsuccess')</script>";
+                            }
+                        }
+                    } else {
+                        $message .= 'Unable to save record';
                     }
+                } catch (PDOException $exception) {
+                    die('ERROR: ' . $exception->getMessage());
                 }
             } else {
-                $message .= 'Unable to save record';
+                echo "<div class='alert alert-danger'>" . $message . "</div>";
             }
-        } catch (PDOException $exception) {
+        }
+
+        // get passed parameter value, in this case, the record ID
+        // isset() is a PHP function used to verify if a value is there or not
+
+        //include database connection
+
+        // read current record's data
+        try {
+            $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id = :order_id ";
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(":order_id", $id);
+            $stmt->execute();
+            $num = $stmt->rowCount();
+
+
+            $qc = "SELECT order_summary.order_id, customers.fname, customers.lname, order_summary.order_create FROM order_summary INNER JOIN customers ON order_summary.username = customers.username WHERE order_id=$id";
+            $stmt2 = $con->prepare($qc);
+            $stmt2->execute();
+            $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $fname = $row2['fname'];
+            $lname = $row2['lname'];
+
+            $query3 = "SELECT * FROM products";
+            $stmt3 = $con->prepare($query3);
+            $stmt3->execute();
+
+            $pArrayID = array();
+            $pArrayName = array();
+            while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                array_push($pArrayID, $row3['id']);
+                array_push($pArrayName, $row3['name']);
+            }
+        }
+        // show error
+        catch (PDOException $exception) {
             die('ERROR: ' . $exception->getMessage());
         }
-        
-    } else {
-        echo "<div class='alert alert-danger'>" . $message . "</div>";
-    }
-}
-
-// get passed parameter value, in this case, the record ID
-// isset() is a PHP function used to verify if a value is there or not
-
-//include database connection
-
-// read current record's data
-try {
-    $query = "SELECT order_details.orderDetail_id, order_details.order_id, order_details.product_id, order_details.quantity, products.name FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_id = :order_id ";
-    $stmt = $con->prepare($query);
-    $stmt->bindParam(":order_id", $id);
-    $stmt->execute();
-    $num = $stmt->rowCount();
-
-
-    $qc = "SELECT order_summary.order_id, customers.fname, customers.lname, order_summary.order_create FROM order_summary INNER JOIN customers ON order_summary.username = customers.username WHERE order_id=$id";
-    $stmt2 = $con->prepare($qc);
-    $stmt2->execute();
-    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-    $fname = $row2['fname'];
-    $lname = $row2['lname'];
-
-    $query3 = "SELECT * FROM products";
-    $stmt3 = $con->prepare($query3);
-    $stmt3->execute();
-
-    $pArrayID = array();
-    $pArrayName = array();
-    while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)) {
-        array_push($pArrayID, $row3['id']);
-        array_push($pArrayName, $row3['name']);
-    }
-}
-// show error
-catch (PDOException $exception) {
-    die('ERROR: ' . $exception->getMessage());
-}
-?>
+        ?>
 
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
             <?php
@@ -158,7 +158,7 @@ catch (PDOException $exception) {
                         foreach ($arrayP as $pRow => $pID) {
                             $pList = '[]';
                             echo "<tr class='pRow'>";
-                            echo "<td><select class='form-control' name='product[]'>";
+                            echo "<td><select class='form-select' name='product[]'>";
                             echo "<option selected></option>";
                             for ($pCount = 0; $pCount < count($pArrayName); $pCount++) {
                                 $product_selected = $pArrayID[$pCount] == $row['product_id'] ? 'selected' : '';
@@ -177,9 +177,9 @@ catch (PDOException $exception) {
                             echo "</tr>";
                         }
                     }
-                }else{
+                } else {
                     foreach ($arrayP as $pRow => $pID) {
-                        $pList = $_POST['product'] ;
+                        $pList = $_POST['product'];
                         echo "<tr class='pRow'>";
                         echo "<td><select class='form-control' name='product[]'>";
                         echo "<option selected></option>";
@@ -198,9 +198,9 @@ catch (PDOException $exception) {
                         echo "</select></td>";
                         echo "<td><button type='button' class='btn mb-3 mx-2' onclick='deleteMe(this)'>X</button></td>";
                         echo "</tr>";
+                    }
                 }
             }
-        }
             ?>
             <tr>
                 <td>
