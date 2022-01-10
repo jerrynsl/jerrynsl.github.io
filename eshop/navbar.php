@@ -1,6 +1,6 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark navbar-sm-light bg-light ">
-    <div class="container-sm border ">
+    <div class="container-sm border d-flex">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -45,9 +45,8 @@
                         <li><a class="dropdown-item text-primary" href="read_customer.php">Read Customer</a></li>
                     </ul>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link text-primary" href="contact.php">Contact Us</a>
-                </li>
+                </ul>
+                <ul class="navbar-nav justify-content-end ">
                 <?php 
                 include 'config/database.php';
         

@@ -101,10 +101,10 @@
                 $flag = 0;
                 $message = '';
 
-                if ($_FILES['product_img']['name']!=$row['product_img']) {
+                if (!empty($_FILES['product_img']['name'])) {
                     $target_dir = "imagesP/";
                     if($row['product_img']!='coming_soon_p.png'){
-                        unlink($target_dir . $row['product_img']);
+                    unlink($target_dir . $row['product_img']);
                     }
                     $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
                     $isUploadOK = TRUE;
@@ -208,7 +208,23 @@
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
-        } ?>
+        } 
+        
+        if(isset($_POST['delete_img'])){
+            $target_dir = "imagesP/";
+            unlink($target_dir . $row['product_img']);
+            $product_img = 'coming_soon_p.png';
+            $target_file = $target_dir . basename($_FILES["product_img"]["name"]);
+
+            $deleteQ='UPDATE products SET product_img=:product_img WHERE id = :id';
+            $stmt = $con->prepare($deleteQ);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':product_img', $product_img);
+            $stmt->execute();
+
+        }
+        
+        ?>
 
 
 
@@ -218,8 +234,10 @@
                 <tr>
                     <td>Image</td>
                     <td><img src="imagesP/<?php echo $product_img;?>" width="200px"><br>
-                        <input type="file" name="product_img" id="fileToUpload" /><br> 
-                        <button type="button" name="delete" class='btn-danger' >Delete</button>
+                        <input type="file" name="product_img" id="fileToUpload" />
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
+                            <input type="submit" class="btn btn-danger" name="delete_img" value='Delete Photo' /></td>
+                        </form>
                     </td>
                 </tr>
                 <tr>

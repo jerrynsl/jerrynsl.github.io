@@ -107,10 +107,10 @@
                 echo "<tr>";
                 echo "<td>{$id}</td>";
                 echo "<td>{$name}</td>";
-                echo "<td><img src='imagesP/{$product_img}' width='200px'></td>";
+                echo "<td><img src='imagesP/{$product_img}' width='100px'></td>";
                 echo isset($_POST['filter']) && $_POST['category'] !== 'all' ? '' : "<td>{$category_name}</td>";
                 echo "<td>{$description}</td>";
-                echo "<td>" . number_format($price, 2) . "</td>";
+                echo "<td class='text-end'>" . number_format($price, 2) . "</td>";
                 echo "<td>";
                 // read one record
                 echo "<a href='product_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";

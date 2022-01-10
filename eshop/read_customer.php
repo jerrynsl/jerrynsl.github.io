@@ -29,7 +29,7 @@
 
         // if it was redirected from delete.php
         if ($action == 'deleted') {
-            echo "<div class='alert alert-success'>Category was deleted.</div>";
+            echo "<div class='alert alert-success'>Customer was deleted.</div>";
         }else if($action == 'deny'){
             echo "<div class='alert alert-danger'>Customer is cannot delete when order is still exist</div>";
         }
@@ -84,7 +84,7 @@
                 echo "<a href='update_customer.php?id={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_customer({$username});'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_customer(\"{$username}\");'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }

@@ -106,8 +106,8 @@
                 echo "</tr>";
 
                 echo "<tr>";
-                echo "<a href='order_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
-                echo "<td colspan='4'><a href='order_read.php' class='btn btn-danger'>Back to order list</a>";
+                echo "<td colspan='4'> <a href='order_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='order_read.php' class='btn btn-danger'>Back to order list</a>";
                 echo "</td>";
                 echo "</tr>";
                 echo "</table>";

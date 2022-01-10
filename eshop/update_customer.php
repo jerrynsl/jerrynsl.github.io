@@ -84,17 +84,16 @@
                 $confirm_new_pass = $_POST['confirm_new_pass'];
                 $flag = 0;
                 $message = '';
-                if ($_FILES['cimg']['name'] != $row['customer_img']) {
+                if (!empty($_FILES['cimg']['name'])) {
                     $target_dir = "imagesC/";
-                    if ($row['product_img'] != 'coming_soon_p.png') {
-                        unlink($target_dir . $row['cimg']);
+                    if($row['customer_img']!='no_photo_c.png'){
+                    unlink($target_dir . $row['customer_img']);
                     }
                     $target_file = $target_dir . basename($_FILES["cimg"]["name"]);
                     $isUploadOK = TRUE;
                     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
                     $check = getimagesize($_FILES["cimg"]["tmp_name"]);
                     if ($check !== false) {
-                        echo "File is an image - " . $check["mime"] . ".";
                         $isUploadOK = TRUE;
                     } else {
                         $flag = 1;
@@ -120,15 +119,16 @@
                         $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
                     } else {
                         if (move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file)) {
-                            echo "The file " . basename($_FILES["cimg"]["name"]) . " has been uploaded.";
+                          
                         } else {
                             $flag = 1;
                             $message .= "Sorry, there was an error uploading your file.<br>";
                         }
                     }
-                } else {
+                }  
+                else{
+                    $customer_img=$row['customer_img'];
 
-                    $customer_img = $row['customer_img'];
                 }
 
                 if (empty($old_pass) && empty($new_pass) && empty($confirm_new_pass)) {
@@ -191,7 +191,23 @@
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
-        } ?>
+        } 
+        
+       
+        if(isset($_POST['delete_img'])){
+            $target_dir = "imagesC/";
+            unlink($target_dir . $row['customer_img']);
+            $customer_img = 'no_photo_c.png';
+            $target_file = $target_dir . basename($_FILES["cimg"]["name"]);
+
+            $deleteQ='UPDATE customers SET customer_img=:customer_img WHERE username = :username';
+            $stmt = $con->prepare($deleteQ);
+            $stmt->bindParam(':username', $id);
+            $stmt->bindParam(':customer_img', $customer_img);
+            $stmt->execute();
+
+        }
+        ?>
 
 
 
@@ -200,16 +216,11 @@
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Image</td>
-
-                    <?php
-                    if ($customer_img == '') {
-                        echo '<td>No image<br>';
-                    } else {
-                        echo '<td><img src="imagesC/' . $customer_img . '" width="200px"><br>';
-                    }
-                    echo ' <input type="file" name="cimg" id="fileToUpload" /></td>';
-                    ?>
-
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
+                    <td><img src="imagesC/<?php echo $customer_img; ?>" width="200px"><br>
+                    <input type="file" name="cimg" id="fileToUpload" />
+                     <input type="submit" class="btn btn-danger" name="delete_img" value='Delete Photo' /></td>
+                    </form>
                 </tr>
                 <tr>
                     <td>Username</td>
