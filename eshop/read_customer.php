@@ -35,7 +35,7 @@
             echo "<div class='alert alert-danger'>Customer is cannot delete when order is still exist</div>";
         }
         // select all data
-        $query = "SELECT username, email, fname, lname, gender, dob, regdatetime, accountstatus FROM customers ORDER BY fname DESC";
+        $query = "SELECT * FROM customers ORDER BY fname DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
 
@@ -55,6 +55,7 @@
             echo "<th hidden>Username</th>";
             echo "<th>First Name</th>";
             echo "<th>Last Name</th>";
+            echo "<th>Image</th>";
             echo "<th>Gender</th>";
             echo "<th>Date of Birth</th>";
             echo "<th>Register Date & Time</th>";
@@ -72,6 +73,7 @@
                 echo "<td hidden>".$row['username']."</td>";
                 echo "<td>".$row['fname']."</td>";
                 echo "<td>".$row['lname']."</td>";
+                echo "<td><img src='imagesC/{$customer_img}' width='100px'></td>";
                 echo "<td>".$row['gender']."</td>";
                 echo "<td>".$row['dob']."</td>";
                 echo "<td>".$row['regdatetime']."</td>";
