@@ -84,13 +84,13 @@
         echo "<td> <input type='submit' name='filter' value='Filter' class='btn btn-primary' />";
         echo '</td></form>';
         echo '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
-        echo "<td><input type='text' name='pname' value='$pname' /> <input type='submit' name='search' value='Search' class='btn btn-danger' /></td>";
+        echo "<td><input type='text' name='pname' value='$pname' /></td><td><input type='submit' name='search' value='Search' class='btn btn-danger' /></td>";
         echo "</tr></form></table>";
 
         //check if more than 0 record found
         if ($num > 0) {
 
-            echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+            echo "<table class='table table-sm table-hover table-responsive table-bordered'>"; //start table
 
             //creating our table heading
             echo "<tr class='text-center'>";

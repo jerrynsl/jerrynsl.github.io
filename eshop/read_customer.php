@@ -48,7 +48,7 @@
         //check if more than 0 record found
         if ($num > 0) {
 
-            echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+            echo "<table class='table table-sm table-hover table-responsive table-bordered'>"; //start table
 
             //creating our table heading
             echo "<tr>";
@@ -60,7 +60,7 @@
             echo "<th>Date of Birth</th>";
             echo "<th>Register Date & Time</th>";
             echo "<th>Account Status</th>";
-
+            echo "<th>Action</th>";
             echo "</tr>";
 
             // retrieve our table contents
