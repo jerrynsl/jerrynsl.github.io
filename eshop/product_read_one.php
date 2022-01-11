@@ -29,7 +29,14 @@
 
         //include database connection
         include 'config/database.php';
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
 
+        // if it was redirected from delete.php
+        if ($action == 'updsuccess') {
+            echo "<div class='alert alert-success'>Product was updated.</div>";
+        }else if($action == 'crtsuccess'){
+            echo "<div class='alert alert-success'>Product was added.</div>";
+        }
         // read current record's data
         try {
             // prepare select query
@@ -105,8 +112,9 @@
             <tr>
                 <td></td>
                 <td>
-                    <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
                     <?php echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
+                    <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
+                   
                 </td>
             </tr>
         </table>

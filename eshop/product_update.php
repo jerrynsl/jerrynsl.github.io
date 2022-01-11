@@ -197,7 +197,7 @@
                 if ($flag == 0) {
 
                     if ($stmt->execute()) {
-                        echo "<div class='alert alert-success'>Record was saved.</div>";
+                        echo "<script>location.replace('product_read_one.php?id=" . $id . "&action=updsuccess')</script>";
                     } else {
                         $message = 'Unable to save record.';
                     }
@@ -237,7 +237,11 @@
                     <td><img src="imagesP/<?php echo $product_img; ?>" width="200px"><br>
                         <input type="file" name="product_img" id="fileToUpload" />
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
-                            <input type="submit" class="btn btn-danger" name="delete_img" value='Delete Photo' />
+                        <?php    
+                        if ($row['product_img']!='coming_soon_p.png'){
+                        echo '<input type="submit" class="btn btn-danger" name="delete_img" value="Delete Photo" />';
+                        }
+                        ?>
                     </td>
         </form>
         </td>

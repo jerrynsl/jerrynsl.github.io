@@ -73,8 +73,9 @@
             <tr>
                 <td></td>
                 <td>
-                    <a href='category_read.php' class='btn btn-danger'>Back to read products</a>
                     <?php echo "<a href='category_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
+                    <a href='category_read.php' class='btn btn-danger'>Back to read products</a>
+                    
                 </td>
             </tr>
         </table>

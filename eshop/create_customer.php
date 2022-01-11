@@ -163,8 +163,10 @@
         if ($flag == 0) {
 
           if ($stmt->execute()) {
-
-            header('Location:index.php');
+            if(isset($_SESSION['username'])){
+              echo "<script>location.replace('read_one_customer.php?id=" . $username . "&action=regsuccess')</script>";
+            }else
+            header('Location:index.php?msg=regsuccess');
           } else {
             $flag = 1;
             $message = "Unable to save record.";

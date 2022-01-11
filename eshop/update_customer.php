@@ -177,7 +177,9 @@
 
                 if ($flag == 0) {
                     if ($stmt->execute()) {
-                        echo "<div class='alert alert-success'>Record was updated.</div>";
+                        
+                        echo "<script>location.replace('read_one_customer.php?id=" . $id . "&action=updsuccess')</script>";
+                        
                     } else {
                         echo $message = "Unable to update record. Please try again.";
                     }
@@ -219,7 +221,11 @@
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$username}"); ?>" method="post" enctype="multipart/form-data">
                     <td><img src="imagesC/<?php echo $customer_img; ?>" width="200px"><br>
                     <input type="file" name="cimg" id="fileToUpload" />
-                     <input type="submit" class="btn btn-danger" name="delete_img" value='Delete Photo' /></td>
+                    <?php    
+                        if ($row['customer_img']!='no_photo_c.png'){
+                        echo '<input type="submit" class="btn btn-danger" name="delete_img" value="Delete Photo" />';
+                        }
+                        ?>
                     </form>
                 </tr>
                 <tr>

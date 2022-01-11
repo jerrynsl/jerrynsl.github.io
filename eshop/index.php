@@ -43,7 +43,7 @@
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if (md5($_POST['password']) == $row['password']) {
           if ($row['accountstatus'] == 'Active') {
-            $_SESSION['username']=$username;
+            $_SESSION['username'] = $username;
             header("Location:home.php");
           } else {
             $flag = 1;
@@ -62,15 +62,19 @@
   ?>
 
   <div class="container container-sm text-center w-50 ">
+  <img src="config/j.jpeg" class=" mb-3" alt="bootstrap logo" width="80" >
     <h3>Please sign in</h3>
     <?php
-   if (isset($_GET['msg']) && $_GET['msg']=='logout') {
-    echo "<div class='alert alert-success'>Log Out Succesful</div>";
-   }
-   if (isset($_GET['msg']) && $_GET['msg']=='pleaselogin'){
-    $flag = 1;
-    $message = 'Please login first, then can access to next page.';
-   }
+    if (isset($_GET['msg']) && $_GET['msg'] == 'logout') {
+      echo "<div class='alert alert-success'>Log Out Successful</div>";
+    }
+    if (isset($_GET['msg']) && $_GET['msg'] == 'pleaselogin') {
+      $flag = 1;
+      $message = 'Please login first, then can access to next page.';
+    }
+    if (isset($_GET['msg']) && $_GET['msg'] == 'regsuccess') {
+      echo "<div class='alert alert-success'>Register Successful</div>";
+    }
     if (isset($flag) && $flag == 1) {
       echo "<div class='alert alert-danger'>$message</div>";
     }

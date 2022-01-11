@@ -28,6 +28,13 @@
 
         //include database connection
         include 'config/database.php';
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+
+        if ($action == 'regsuccess') {
+            echo "<div class='alert alert-success'>Customer was added.</div>";
+        }else if($action == 'updsuccess'){
+            echo "<div class='alert alert-success'>Profile was updated.</div>";
+        }
 
         // read current record's data
         try {
@@ -69,16 +76,16 @@
         <!-- HTML read one record table will be here -->
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
-        <tr>
+            <tr>
                 <td>Customer Image</td>
-                
+
                 <?php
-                    if($customer_img==''){
-                        echo '<td>No image</td>';
-                    }else{
-                        echo '<td><img src="imagesC/'.$customer_img.'"width="200px"></td>';
-                    }
-                
+                if ($customer_img == '') {
+                    echo '<td>No image</td>';
+                } else {
+                    echo '<td><img src="imagesC/' . $customer_img . '"width="200px"></td>';
+                }
+
                 ?>
             </tr>
             <tr>
@@ -96,7 +103,8 @@
             <tr>
                 <td>Gender</td>
                 <td><?php echo htmlspecialchars($gender, ENT_QUOTES);  ?></td>
-            </tr> <tr>
+            </tr>
+            <tr>
                 <td>Date of Birth</td>
                 <td><?php echo htmlspecialchars($dob, ENT_QUOTES);  ?></td>
             </tr>
@@ -111,8 +119,9 @@
             <tr>
                 <td></td>
                 <td>
-                    <a href='read_customer.php' class='btn btn-danger'>Back to read customers</a>
                     <?php echo "<a href='update_customer.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>"; ?>
+                    <a href='read_customer.php' class='btn btn-danger'>Back to read customers</a>
+
                 </td>
             </tr>
         </table>

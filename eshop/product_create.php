@@ -68,7 +68,6 @@
                     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
                     $check = getimagesize($_FILES["product_img"]["tmp_name"]);
                     if ($check !== false) {
-                        echo "File is an image - " . $check["mime"] . ".";
                         $isUploadOK = TRUE;
                     } else {
                         $flag = 1;
@@ -94,7 +93,6 @@
                         $message .= "Sorry, your file was not uploaded."; // if everything is ok, try to upload file
                     } else {
                         if (move_uploaded_file($_FILES["product_img"]["tmp_name"], $target_file)) {
-                            echo "The file " . basename($_FILES["product_img"]["name"]) . " has been uploaded.";
                         } else {
                             $flag = 1;
                             $message .= "Sorry, there was an error uploading your file.<br>";
@@ -106,57 +104,51 @@
                 }
 
                 if (empty($name)) {
-
                     $flag = 1;
-                    $message = 'Please enter item name.';
+                    $message .= 'Please enter item name.<br>';
                 }
 
                 if (empty($price)) {
-
                     $flag = 1;
-                    $message = 'Please enter price.';
+                    $message .= 'Please enter price.<br>';
+                }else  if (!is_numeric($price) || !is_numeric($promo_price)) {
+                    $flag = 1;
+                    $message .= "Price must be numerical.<br>";
+                }else if ($price < 0 || $promo_price < 0) {
+                    $flag = 1;
+                    $message .= "Price cannot be negative.<br>";
                 }
-
                 if (empty($promo_price)) {
-
                     $flag = 1;
-                    $message = 'Please enter promotion price.';
+                    $message .= 'Please enter promotion price.<br>';
+                }else if (!is_numeric($promo_price)){
+                    $flag = 1;
+                    $message .= "Promotion Price must be numerical.<br>";
+
+                }else  if ($promo_price > $price) {
+                    $flag = 1;
+                    $message .= "Promo Price cannot bigger than Normal Price<br>";
                 }
                 if (empty($manu_date)) {
 
                     $flag = 1;
-                    $message = 'Please select manufactor date.';
+                    $message .= 'Please select manufactor date.<br>';
                 }
-
                 if (empty($exp_date)) {
 
                     $flag = 1;
-                    $message = 'Please select expired date.';
-                }
-                if (!is_numeric($price) || !is_numeric($promo_price)) {
-                    $flag = 1;
-                    $message = "Price must be numerical.";
-                }
-
-                if ($price < 0 || $promo_price < 0) {
-                    $flag = 1;
-                    $message = "Price cannot be negative.";
-                }
-                if ($promo_price > $price) {
-                    $flag = 1;
-                    $message = "Promo Price cannot bigger than Normal Price";
+                    $message .= 'Please select expired date.<br>';
                 }
                 if ($manu_date > $exp_date) {
                     $flag = 1;
-                    $message = "Expired date must be after Manufacture date";
+                    $message .= "Expired date must be after Manufacture date<br>";
                 }
-
                 if ($flag == 0) {
-
                     if ($stmt->execute()) {
-                        echo "<div class='alert alert-success'>Record was saved.</div>";
+                        $id=$con->lastInsertId();
+                        echo "<script>location.replace('product_read_one.php?id=" . $id . "&action=updsuccess')</script>";
                     } else {
-                        $message = 'Unable to save record.';
+                        $message .= 'Unable to save record.';
                     }
                 } else {
 
@@ -176,7 +168,7 @@
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Name</td>
-                    <td><input type='text' name='name' class='form-control' /></td>
+                    <td><input type='text' name='name' value='<?php if($_POST){echo $_POST['name'];} ?>' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Category</td>
@@ -208,23 +200,23 @@
                 </tr>
                 <tr>
                     <td>Description</td>
-                    <td><textarea type='text' name='description' class='form-control'></textarea></td>
+                    <td><textarea type='text' name='description' value='<?php if($_POST){echo $_POST['description'];} ?>' class='form-control'></textarea></td>
                 </tr>
                 <tr>
                     <td>Price</td>
-                    <td><input type='text' name='price' class='form-control' /></td>
+                    <td><input type='text' name='price' value='<?php if($_POST){echo $_POST['price'];} ?>' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Promotion Price</td>
-                    <td><input type='text' name='promo_price' class='form-control' /></td>
+                    <td><input type='text' name='promo_price' value='<?php if($_POST){echo $_POST['promo_price'];} ?>' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Manufacture Date</td>
-                    <td><input type='date' name='manu_date' class='form-control' /></td>
+                    <td><input type='date' name='manu_date' value='<?php if($_POST){echo $_POST['manu_date'];} ?>' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Expired Date</td>
-                    <td><input type='date' name='exp_date' class='form-control' /></td>
+                    <td><input type='date' name='exp_date' value='<?php if($_POST){echo $_POST['exp_date'];} ?>' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td></td>
