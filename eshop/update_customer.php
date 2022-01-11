@@ -135,32 +135,55 @@
                     $flag = 0;
                     $unchange_new_password = $row['password'];
                     $stmt->bindParam(':password', $unchange_new_password);
+                }else if(!empty($old_pass)){
+
+                    if (md5($old_pass)==$row['password']){
+
+                        if($new_pass=$confirm_new_pass){
+                            $flag = 0;
+                            $e_new_password = md5($new_pass);
+                            $stmt->bindParam(':password', $e_new_password);
+                          
+                        
+                        }else{
+                        $flag = 1;
+                        $message .= "New password not same as confirm new password.";
+                        }
+                    }else{
+                        $flag = 1;
+                        $message .= "Your old password is inccorect.";
+                    }
+                    if (!preg_match("/[a-zA-Z]/", $new_pass) || !preg_match("/[0-9]/", $new_pass)) {
+                        $flag = 1;
+                        $message .= "Your password must contain alphabets and number.";
+                      }
+              
                 }
 
 
                 if (empty($email)) {
                     $flag = 1;
-                    $message = "Please insert your email.";
+                    $message .= "Please insert your email.";
                 }
 
                 if (empty($fname)) {
                     $flag = 1;
-                    $message = "Please insert your first name.";
+                    $message .= "Please insert your first name.";
                 }
                 if (empty($lname)) {
                     $flag = 1;
-                    $message = "Please insert your last name.";
+                    $message .= "Please insert your last name.";
                 }
 
 
                 if (empty($gender)) {
                     $flag = 1;
-                    $message = "Please select gender.";
+                    $message .= "Please select gender.";
                 }
 
                 if (empty($dob)) {
                     $flag = 1;
-                    $message = "Please select your date of birth.";
+                    $message .= "Please select your date of birth.";
                 }
                 // bind the parameters
 
@@ -181,7 +204,7 @@
                         echo "<script>location.replace('read_one_customer.php?id=" . $id . "&action=updsuccess')</script>";
                         
                     } else {
-                        echo $message = "Unable to update record. Please try again.";
+                        echo $message .= "Unable to update record. Please try again.";
                     }
                 } else {
 
@@ -276,15 +299,15 @@
                 </tr>
                 <tr>
                     <td>Old Password</td>
-                    <td><input type='text' name='old_pass' class='form-control' /></td>
+                    <td><input type='password' name='old_pass' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>New Password</td>
-                    <td><input type='text' name='new_pass' class='form-control' /></td>
+                    <td><input type='password' name='new_pass' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Comfirm Password</td>
-                    <td><input type='text' name='confirm_new_pass' class='form-control' /></td>
+                    <td><input type='password' name='confirm_new_pass' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td></td>
